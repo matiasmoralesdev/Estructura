@@ -55,7 +55,51 @@ public class ArbolAVL {
 
     public boolean eliminar(Comparable elem) {
         boolean exito = true;
+        if (this.raiz != null) {
+            this.raiz = eliminar(elem, this.raiz);
+        }
+
         return exito;
+    }
+
+    private NodoAVL eliminar(Comparable elem, NodoAVL nodo) {
+
+        if (elem.compareTo(nodo.getElem()) < 0) {
+            if (nodo.getIzquierdo() != null) {
+                nodo.setIzquierdo(eliminar(elem, nodo.getIzquierdo()));
+                nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
+                nodo = balancear(nodo);
+            }
+        } else if (elem.compareTo(nodo.getElem()) > 0) {
+            if (nodo.getDerecho() != null) {
+                nodo.setDerecho(eliminar(elem, nodo.getDerecho()));
+                nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
+                nodo = balancear(nodo);
+            }
+        } else {
+            if (nodo.getIzquierdo() == null && nodo.getDerecho() == null) {
+                nodo = null;
+            } else if (nodo.getIzquierdo() == null && nodo.getDerecho() != null) {
+                nodo = nodo.getDerecho();
+            } else if (nodo.getIzquierdo() != null && nodo.getIzquierdo() == null) {
+                nodo = nodo.getIzquierdo();
+            } else {
+                NodoAVL aux = recuperarElMinimo(nodo.getDerecho());
+                nodo.setElem(aux.getElem());
+                nodo.setDerecho(eliminar(aux.getElem(), nodo.getDerecho()));
+            }
+        }
+        return nodo;
+    }
+
+    private NodoAVL recuperarElMinimo(NodoAVL nodo) {
+        NodoAVL retorno;
+        if (nodo.getIzquierdo() != null) {
+            retorno = recuperarElMinimo(nodo.getIzquierdo());
+        } else {
+            retorno = nodo;
+        }
+        return retorno;
     }
 
     private int balance(NodoAVL nodo) {
