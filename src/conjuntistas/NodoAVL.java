@@ -11,20 +11,20 @@ package conjuntistas;
  */
 public class NodoAVL {
 
-    private int elemento;
+    private Comparable elemento;
     private NodoAVL izquierdo;
     private NodoAVL derecho;
     private int altura;
 
     //Constructores
     public NodoAVL() {
-        this.elemento = 0;
+        this.elemento = null;
         this.derecho = null;
         this.izquierdo = null;
         this.altura = 0;
     }
 
-    public NodoAVL(int elem) {
+    public NodoAVL(Comparable elem) {
         this.elemento = elem;
         this.derecho = null;
         this.izquierdo = null;
@@ -32,7 +32,7 @@ public class NodoAVL {
     }
 
     //Observadores
-    public int getElem() {
+    public Comparable getElem() {
         return this.elemento;
     }
 
@@ -58,32 +58,42 @@ public class NodoAVL {
 
     }
 
+    public void setElem(Comparable elem) {
+        this.elemento = elem;
+    }
+
     public void setAltura(int alt) {
         this.altura = alt;
     }
 
-    public void setElem(int elem) {
-        this.elemento = elem;
+    public void aumentarAltura() {
+        this.altura++;
+    }
+
+    public void sumarAltura(int n) {
+        this.altura += n;
     }
 
     //Debug
     @Override
     public String toString() {
-        
+
         String cadena = "NODO: " + this.elemento + " ALTURA: " + this.altura + "\nHIJO IZQUIERDO: ";
 
         if (this.izquierdo != null) {
             cadena = cadena + this.izquierdo.getElem();
         } else {
-            cadena = cadena + "NO TIENE";
+            cadena = cadena + "[NO TIENE]";
         }
         cadena = cadena + "\nHIJO DERECHO: ";
 
         if (this.derecho != null) {
             cadena = cadena + this.derecho.getElem();
         } else {
-            cadena = cadena + "NO TIENE";
+            cadena = cadena + "[NO TIENE]";
         }
+
+        cadena += "\n";
 
         return cadena;
     }
