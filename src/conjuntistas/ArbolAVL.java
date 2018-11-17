@@ -11,7 +11,7 @@ public class ArbolAVL {
         this.raiz = null;
     }
 
-    public boolean insertar(int elem) {
+    public boolean insertar(Comparable elem) {
         boolean exito = true;
         if (this.raiz == null) {
             this.raiz = new NodoAVL(elem);
@@ -53,8 +53,21 @@ public class ArbolAVL {
         return nodo;
     }
 
+    public boolean eliminar(Comparable elem) {
+        boolean exito = true;
+        return exito;
+    }
+
     private int balance(NodoAVL nodo) {
         return altura(nodo.getIzquierdo()) - altura(nodo.getDerecho());
+    }
+
+    private int altura(NodoAVL nodo) {
+        int h = -1;
+        if (nodo != null) {
+            h = nodo.getAltura();
+        }
+        return h;
     }
 
     private NodoAVL balancear(NodoAVL nodo) {
@@ -78,7 +91,8 @@ public class ArbolAVL {
             }
         }
         if (balancePadre == 2) {
-            //Arbol caido a la izquierda, se procede a balancearlo a la derecha
+            //Arbol caido a la izquierda
+            //Se procede a balancearlo a la derecha
             h = nodo.getIzquierdo();
             temp = h.getDerecho();
             balanceHijo = balance(h);
@@ -128,7 +142,7 @@ public class ArbolAVL {
 
         h.sumarAltura(1);
 
-        temp = nodo.getIzquierdo().getDerecho();
+        temp = null;
         h.setIzquierdo(nodo);
         nodo.setDerecho(temp);
 
@@ -140,7 +154,7 @@ public class ArbolAVL {
     private NodoAVL rotDobleIzqDer(NodoAVL nodo, NodoAVL h, NodoAVL temp) {
         //Rotacion doble Izquierda-Derecha
         h = nodo.getIzquierdo().getDerecho();
-        temp = h.getIzquierdo();
+        temp = null;
 
         nodo.getIzquierdo().sumarAltura(-1);
 
@@ -157,14 +171,6 @@ public class ArbolAVL {
         //
         nodo.sumarAltura(-2);
         //
-        return h;
-    }
-
-    private int altura(NodoAVL nodo) {
-        int h = -1;
-        if (nodo != null) {
-            h = nodo.getAltura();
-        }
         return h;
     }
 
