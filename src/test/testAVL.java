@@ -1,6 +1,7 @@
 package test;
 
 import conjuntistas.ArbolAVL;
+import juego.Pais;
 
 public class testAVL {
     
@@ -8,14 +9,13 @@ public class testAVL {
         
         ArbolAVL avl = new ArbolAVL();
         
-        avl.insertar(10);
-        avl.insertar(5);
-        avl.insertar(15);
-        avl.insertar(12);
-        avl.insertar(17);
-        avl.insertar(6);
-        avl.insertar(13);
-        avl.eliminar(6);
+        Pais p1 = new Pais("Gato", 0);
+        Pais p2 = new Pais("Arca", 0);
+        Pais p3 = new Pais("Zona", 0);
+        
+        avl.insertar(p1);
+        avl.insertar(p2);
+        avl.insertar(p3);
         
         System.out.println(avl.toString());
         

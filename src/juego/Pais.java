@@ -1,6 +1,6 @@
 package juego;
 
-public class Pais {
+public class Pais implements Comparable {
 
     String nombre;
     int cantEjercitos;
@@ -9,8 +9,17 @@ public class Pais {
         this.nombre = name;
         this.cantEjercitos = fichas;
     }
-    
-    
-    
 
+    @Override
+    public int compareTo(Object o) {
+        Pais p2 = (Pais) o;
+        return this.nombre.compareTo(p2.nombre);
+    }
+
+    @Override
+    public String toString(){
+        return this.nombre;
+    }
+    
+    
 }

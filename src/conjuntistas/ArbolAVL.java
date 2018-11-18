@@ -1,7 +1,5 @@
 package conjuntistas;
 
-import utiles.ErrorTDA;
-
 public class ArbolAVL {
 
     private NodoAVL raiz;
@@ -92,10 +90,28 @@ public class ArbolAVL {
         return nodo;
     }
 
+    public Comparable minimoElem() {
+        return recuperarElMinimo(this.raiz).getElem();
+    }
+
     private NodoAVL recuperarElMinimo(NodoAVL nodo) {
         NodoAVL retorno;
         if (nodo.getIzquierdo() != null) {
             retorno = recuperarElMinimo(nodo.getIzquierdo());
+        } else {
+            retorno = nodo;
+        }
+        return retorno;
+    }
+
+    public Comparable maximoElem() {
+        return recuperarElMaximo(this.raiz).getElem();
+    }
+
+    private NodoAVL recuperarElMaximo(NodoAVL nodo) {
+        NodoAVL retorno;
+        if (nodo.getDerecho() != null) {
+            retorno = recuperarElMaximo(nodo.getDerecho());
         } else {
             retorno = nodo;
         }
@@ -235,18 +251,3 @@ public class ArbolAVL {
     }
 
 }
-/*
-    private int altura(NodoAVL nodo) {
-        int h = -1;
-        int h1;
-        if (nodo != null) {
-            h = 1 + altura(nodo.getIzquierdo());
-            h1 = 1 + altura(nodo.getDerecho());
-
-            if (h1 > h) {
-                h = h1;
-            }
-        }
-        return h;
-    }
- */
