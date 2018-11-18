@@ -12,6 +12,12 @@ public class NodoVertice {
         this.primerAdy = null;
     }
 
+    public NodoVertice(Comparable item, NodoVertice n) {
+        this.elem = item;
+        this.sigVertice = n;
+        this.primerAdy = null;
+    }
+
     public NodoVertice(Comparable item, NodoAdyEti ady, NodoVertice n) {
         this.elem = item;
         this.sigVertice = n;

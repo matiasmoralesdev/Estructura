@@ -7,7 +7,21 @@ public class NodoAdyEti {
     private String etiqueta;
 
     public NodoAdyEti() {
+        this.etiqueta = null;
+        this.sigAdy = null;
+        this.vertice = null;
+    }
 
+    public NodoAdyEti(NodoVertice vertice, String etiqueta) {
+        this.vertice = vertice;
+        this.etiqueta = etiqueta;
+        this.sigAdy = null;
+    }
+
+    public NodoAdyEti(NodoVertice vertice, NodoAdyEti sigAdy, String etiqueta) {
+        this.vertice = vertice;
+        this.sigAdy = sigAdy;
+        this.etiqueta = etiqueta;
     }
 
     public NodoVertice getVertice() {
