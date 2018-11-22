@@ -230,6 +230,14 @@ public class GrafoEtiquetado {
         return exito;
     }
 
+    public boolean esVacio() {
+        return this.inicio == null;
+    }
+
+    public void vaciar() {
+        this.inicio = null;
+    }
+
     @Override
     public String toString() {
         String s = "";
