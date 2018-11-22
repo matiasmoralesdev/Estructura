@@ -18,6 +18,7 @@ public class testAVL {
         avl.insertar(p3);
         
         System.out.println(avl.toString());
+        System.out.println(avl.listar().toString());
         
     }
 }

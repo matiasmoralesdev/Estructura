@@ -9,11 +9,11 @@ public class testLista {
         System.out.println(lista.esVacia());
         
         
-        lista.insertar("Hola", 1);
-        lista.insertar("Chau", 2);
-        lista.insertar("jaja", 2);
-        lista.insertar("asdasd", 4);
-        lista.eliminar(5);
+        lista.insertarAlFinal("Hola");
+        lista.insertarAlFinal("Chau");
+        lista.insertarAlFinal("Perro");
+        lista.insertarAlFinal("Gato");
+        lista.insertarAlFinal("Caca");
         
         System.out.println(lista.toString());
     }

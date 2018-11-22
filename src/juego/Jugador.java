@@ -5,15 +5,31 @@ import conjuntistas.ArbolAVL;
 public class Jugador {
 
     private String nombre;
-    private ArbolAVL paises;
+    private ArbolAVL paisesObtenidos;
 
     public Jugador() {
-        
+
     }
 
     public Jugador(String nombre) {
         this.nombre = nombre;
-        this.paises = new ArbolAVL();
+        this.paisesObtenidos = new ArbolAVL();
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public ArbolAVL getPaisesObtenidos() {
+        return paisesObtenidos;
+    }
+
+    public void setPaisesObtenidos(ArbolAVL paisesObtenidos) {
+        this.paisesObtenidos = paisesObtenidos;
     }
 
 }

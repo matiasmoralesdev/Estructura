@@ -15,6 +15,18 @@ public class Pais implements Comparable {
         this.cantEjercitos = 0;
     }
 
+    public int getFichas() {
+        return this.cantEjercitos;
+    }
+
+    public void setFichas(int ejercitos) {
+        this.cantEjercitos = ejercitos;
+    }
+
+    public void sumarFicha(int n) {
+        this.cantEjercitos += n;
+    }
+
     @Override
     public boolean equals(Object o) {
         return this.nombre.equals(o.toString());

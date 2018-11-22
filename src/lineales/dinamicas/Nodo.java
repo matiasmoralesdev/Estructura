@@ -10,6 +10,11 @@ public class Nodo {
         this.enlace = null;
     }
 
+    public Nodo(Comparable elem) {
+        this.elem = elem;
+        this.enlace = null;
+    }
+
     public Nodo(Comparable elem, Nodo enlace) {
         this.elem = elem;
         this.enlace = enlace;

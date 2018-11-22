@@ -37,8 +37,57 @@ public class Lista {
         return exito;
     }
 
+    /**
+     * Inserta siempre al final de la lista, como no es posible que haya un
+     * error en la posicion, este metodo no devuelve un valor booleano
+     *
+     * @param elem Es el elemento comparable que tendra el nuevo nodo creado
+     */
+    public void insertarAlFinal(Comparable elem) {
+        if (esVacia()) {
+            this.cabecera = new Nodo(elem);
+
+        } else {
+            Nodo aux = this.cabecera;
+            while (aux.getEnlace() != null) {
+                aux = aux.getEnlace();
+            }
+            aux.setEnlace(new Nodo(elem));
+        }
+        this.longitud++;
+    }
+
+    /**
+     * Inserta u nuevo elemento al principio de la lista, como no es posible que
+     * ocurra algun error ya que no entra por parametro ninguna posicion
+     * entonces no es necesario que retorne un valor booleano
+     *
+     * @param elem Es el elemento comparable que tendra el nuevo nodo creado
+     */
+    public void insertarInicio(Comparable elem) {
+        Nodo inicio = this.cabecera;
+        this.cabecera = new Nodo(elem, inicio);
+        this.longitud++;
+    }
+
     public int localizar(Comparable elem) {
-        return 3;
+        int posicion = 1;
+        Nodo aux = this.cabecera;
+        boolean encontrado = false;
+        while (aux != null && !encontrado) {
+            if (aux.getElem().compareTo(elem) == 0) {
+                encontrado = true;
+            } else {
+                aux = aux.getEnlace();
+                posicion++;
+            }
+        }
+
+        if (!encontrado) {
+            posicion = -1;
+        }
+
+        return posicion;
     }
 
     public boolean eliminar(int pos) {
@@ -68,6 +117,31 @@ public class Lista {
 
     public int longitud() {
         return this.longitud;
+    }
+
+    public String[] toArrayString() {
+        String[] arreglo = new String[this.longitud];
+        Nodo aux = this.cabecera;
+        int i = 0;
+        while (aux != null) {
+            arreglo[i] = aux.getElem().toString();
+            aux = aux.getEnlace();
+            i++;
+        }
+        return arreglo;
+    }
+
+    public Comparable[] toArray() {
+        Comparable[] arreglo = new Comparable[this.longitud];
+
+        Nodo aux = this.cabecera;
+        int i = 0;
+        while (aux != null) {
+            arreglo[i] = aux.getElem();
+            aux = aux.getEnlace();
+            i++;
+        }
+        return arreglo;
     }
 
     @Override

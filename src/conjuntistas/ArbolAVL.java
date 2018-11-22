@@ -1,5 +1,7 @@
 package conjuntistas;
 
+import lineales.dinamicas.Lista;
+
 public class ArbolAVL {
 
     private NodoAVL raiz;
@@ -232,6 +234,63 @@ public class ArbolAVL {
         nodo.sumarAltura(-2);
         //
         return h;
+    }
+
+    public Lista listar() {
+        Lista lista = new Lista();
+        listar(this.raiz, lista);
+        return lista;
+    }
+
+    private void listar(NodoAVL nodo, Lista lista) {
+        if (nodo != null) {
+            listar(nodo.getIzquierdo(), lista);
+            lista.insertarAlFinal(nodo.getElem());
+            listar(nodo.getDerecho(), lista);
+        }
+    }
+
+    public Lista listarEnRango(Comparable min, Comparable max) {
+        Lista lista = new Lista();
+        listarEnRango(this.raiz, lista, min, max);
+        return lista;
+    }
+
+    private void listarEnRango(NodoAVL nodo, Lista lista, Comparable min, Comparable max) {
+        if (nodo != null) {
+            Comparable actual = nodo.getElem();
+            if (actual.compareTo(min) > 0) {
+                listarEnRango(nodo.getIzquierdo(), lista, min, max);
+            }
+            if (actual.compareTo(min) >= 0 && actual.compareTo(max) <= 0) {
+                lista.insertarAlFinal(nodo.getElem());
+            }
+
+            if (actual.compareTo(max) < 0) {
+                listarEnRango(nodo.getDerecho(), lista, min, max);
+            }
+        }
+    }
+
+    public Comparable minimo() {
+        return minimo(this.raiz);
+    }
+
+    private Comparable minimo(NodoAVL nodo) {
+        Comparable minimo;
+
+        if (nodo != null) {
+
+            if (nodo.getIzquierdo() != null) {
+                minimo = minimo(nodo.getIzquierdo());
+            } else {
+                minimo = nodo.getElem();
+            }
+
+        } else {
+            minimo = "Error";
+        }
+        return minimo;
     }
 
     @Override

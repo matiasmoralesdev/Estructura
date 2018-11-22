@@ -66,28 +66,81 @@ public class GrafoEtiquetado {
         NodoVertice auxO = ubicarVertice(origen);
         NodoVertice auxD = ubicarVertice(destino);
 
+        NodoAdyEti siguiente;
+
         if (auxO != null && auxD != null) {
             //Verifica si ambos vertices existen
             NodoAdyEti ady = auxO.getPrimerAdy();
             if (ady != null) {
-
+                siguiente = ady.getSigAdyacente();
                 if (ady.getVertice().getElem().equals(destino)) {
-                    this.inicio.setPrimerAdy(null);
+                    auxO.setPrimerAdy(siguiente);
                 } else {
-                    NodoAdyEti anterior = ady;
-                    ady = ady.getSigAdyacente();
-                    while (ady != null && !exito) {
-
-                        if (ady.getVertice().getElem().equals(destino)) {
-                            anterior.setSigAdy(ady.getSigAdyacente());
+                    while (siguiente != null && !exito) {
+                        if (siguiente.getVertice().getElem().equals(destino)) {
+                            ady.setSigAdy(siguiente.getSigAdyacente());
                             exito = true;
                         } else {
                             ady = ady.getSigAdyacente();
-                            anterior = anterior.getSigAdyacente();
+                            siguiente = siguiente.getSigAdyacente();
                         }
                     }
                 }
             }
+        }
+
+        return exito;
+    }
+
+    /**
+     *
+     * @param origen
+     * @param destino
+     * @return
+     */
+    public boolean eliminarArcoDoble(Comparable origen, Comparable destino) {
+        boolean exito = false;
+        NodoVertice auxO = ubicarVertice(origen);
+        NodoVertice auxD = ubicarVertice(destino);
+        NodoAdyEti siguiente;
+        if (auxO != null && auxD != null) {
+            //Verifica si ambos vertices existen
+            NodoAdyEti ady = auxO.getPrimerAdy();
+            if (ady != null) {
+                siguiente = ady.getSigAdyacente();
+                if (ady.getVertice().getElem().equals(destino)) {
+                    auxO.setPrimerAdy(siguiente);
+                } else {
+                    while (siguiente != null && !exito) {
+                        if (siguiente.getVertice().getElem().equals(destino)) {
+                            ady.setSigAdy(siguiente.getSigAdyacente());
+                            exito = true;
+                        } else {
+                            ady = ady.getSigAdyacente();
+                            siguiente = siguiente.getSigAdyacente();
+                        }
+                    }
+                }
+            }
+            exito = false;
+            ady = auxD.getPrimerAdy();
+            if (ady != null) {
+                siguiente = ady.getSigAdyacente();
+                if (ady.getVertice().getElem().equals(origen)) {
+                    auxD.setPrimerAdy(siguiente);
+                } else {
+                    while (siguiente != null && !exito) {
+                        if (siguiente.getVertice().getElem().equals(origen)) {
+                            ady.setSigAdy(siguiente.getSigAdyacente());
+                            exito = true;
+                        } else {
+                            ady = ady.getSigAdyacente();
+                            siguiente = siguiente.getSigAdyacente();
+                        }
+                    }
+                }
+            }
+
         }
 
         return exito;
@@ -117,6 +170,13 @@ public class GrafoEtiquetado {
         return exito;
     }
 
+    /**
+     *
+     * @param origen
+     * @param destino
+     * @param etiqueta
+     * @return
+     */
     public boolean insertarArcoDoble(Comparable origen, Comparable destino, String etiqueta) {
         boolean exito = false;
         NodoVertice auxO = ubicarVertice(origen);
@@ -189,6 +249,15 @@ public class GrafoEtiquetado {
         }
     }
 
+    public Comparable recuperarElem(Comparable buscado) {
+        NodoVertice nodo = ubicarVertice(buscado);
+        Comparable retorno = null;
+        if (nodo != null) {
+            retorno = nodo.getElem();
+        }
+        return retorno;
+    }
+
     /**
      *
      * @param origen
@@ -230,6 +299,19 @@ public class GrafoEtiquetado {
         return exito;
     }
 
+    public Lista listarArcos(Comparable elem) {
+        Lista lista = new Lista();
+        NodoVertice nodo = ubicarVertice(elem);
+        if (nodo != null) {
+            NodoAdyEti ady = nodo.getPrimerAdy();
+            while (ady != null) {
+                lista.insertarAlFinal(ady.getVertice().getElem());
+                ady = ady.getSigAdyacente();
+            }
+        }
+        return lista;
+    }
+
     public boolean esVacio() {
         return this.inicio == null;
     }
@@ -241,22 +323,19 @@ public class GrafoEtiquetado {
     @Override
     public String toString() {
         String s = "";
-
         NodoVertice vertice = this.inicio;
-
         while (vertice != null) {
             s += "VERTICE: " + vertice.getElem().toString() + "\n";
             NodoAdyEti ady = vertice.getPrimerAdy();
             while (ady != null) {
                 s += "ARCO A: ";
-                s += ady.getVertice().getElem().toString() + " ";
+                s += ady.getVertice().getElem().toString() + "  -  ";
                 s += "ETIQUETA: " + ady.getEtiqueta() + "\n";
                 ady = ady.getSigAdyacente();
             }
             s += "\n";
             vertice = vertice.getSigVertice();
         }
-
         return s;
     }
 
