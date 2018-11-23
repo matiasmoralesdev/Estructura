@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/test/testAVL.java</file>
-            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/grafos/GrafoEtiquetado.java</file>
-            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/test/testGrafoEtiquetado.java</file>
+            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/juego/Jugador.java</file>
+            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/juego/Pais.java</file>
             <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/juego/JuegoJEG.java</file>
-            <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/lineales/dinamicas/Lista.java</file>
             <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/ventanas/Ventanas.java</file>
             <file>file:/C:/Users/Matthew/Documents/GitHub/Estructura/src/ventanas/TestVentanas.java</file>
         </group>

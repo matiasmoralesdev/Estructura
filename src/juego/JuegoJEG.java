@@ -1,35 +1,38 @@
 package juego;
 
+import conjuntistas.ArbolAVL;
 import grafos.GrafoEtiquetado;
 import java.util.HashMap;
 import ventanas.Ventanas;
-import conjuntistas.ArbolAVL;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+/**
+ *
+ * @author Matthew
+ */
 public class JuegoJEG {
     //Declaracion de Variables
 
     static GrafoEtiquetado mundoTEG = new GrafoEtiquetado();
-    static String errorMapaVacio = "NO HAY UN MAPA CREADO";
 
     static Jugador jugador1 = new Jugador("Alfa");
     static Jugador jugador2 = new Jugador("Beta");
     static Jugador jugador3 = new Jugador("Gama");
-
     static Jugador[] jugadores = {jugador1, jugador2, jugador3};
+
+    static HashMap relacion = new HashMap();
+
+    static String errorMapaVacio = "NO HAY UN MAPA CREADO";
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        PrintWriter salida = new PrintWriter(new FileOutputStream("datos.txt"));
+        PrintWriter salida = new PrintWriter(new FileOutputStream("log.txt"));
         salida.print("jaja");
         salida.close();
 
         String datoEntrada = "";
-
-        HashMap relacion = new HashMap();
-        //relacion.
 
         //Mecanismo del menu
         int opcion;
@@ -43,34 +46,39 @@ public class JuegoJEG {
                     asignarPais();
                     break;
                 case 2: //3. atacar(pais1,pais2)
+                    atacar();
                 case 3: //4. obtenerCantPaises(jugador)
                     obtenerCantPaises();
                     break;
                 case 4: //5. obtenerVecinos(pais)
                     obtenerVecinos();
                     break;
-
-                case 5:
-                    if (!mundoTEG.esVacio()) {
-
-                        System.out.println(mundoTEG.toString());
-                    } else {
-                        Ventanas.mostrarError("No hay mapa creado");
-                    }
+                case 5: //6. crearPactor(pais1,pais2)
+                    crearPacto();
                     break;
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                case 11:
-                case 12:
+                case 6: //agregaFichas(pais,cantFichas)
+                    agregarFichas();
+                    break;
+                case 7: //quitaFichas (pais,cantFichas)
+                    quitarFichas();
+                    break;
+                case 8: //cantJugadasMinimas(pais1,pais2)
+                    cantJugadasMinimas();
+                    break;
+                case 9: //esPosibleLlegar(pais1,pais2,k)
+                    esPosibleLlegar();
+                    break;
+                case 10: //obtenerAtaquesConvenientes(jugador)
+                    obtenerAtqConvenientes();
+                    break;
+                case 11: //vaGanando()
+                    vaGanando();
+                    break;
+                case 12: //cumplioObjetivo()
+                    cumplioObjetivo();
+                    break;
                 case 13: //mostrarEstado()
-                    if (!mundoTEG.esVacio()) {
-                        Ventanas.mostrarTexto("MUNDO TEG", mundoTEG.toString(), 50, 25);
-                    } else {
-                        Ventanas.mostrarError("No hay mapa creado");
-                    }
+                    mostrarEstado();
                     break;
             }
 
@@ -135,7 +143,7 @@ public class JuegoJEG {
 
     }
 
-    private static String mostrarPaises() {
+    private static String mostrarPaises2() {
         String[] opciones = mundoTEG.listarEnProfundidad().toArrayString();
         String opcion;
         //mostrar el menu y leer la opcion
@@ -146,15 +154,48 @@ public class JuegoJEG {
         return opcion;
     }
 
+    private static String mostrarPaises() {
+        String[] opciones = mundoTEG.listarEnProfundidad().toArrayString();
+        ArbolAVL orden = new ArbolAVL();
+
+        for (String option : opciones) {
+            orden.insertar(option);
+        }
+
+        opciones = orden.listar().toArrayString();
+        String opcion;
+        //mostrar el menu y leer la opcion
+        opcion = Ventanas.pedirUnaOpcion("Menu Principal", "Elija una opcion", opciones);
+        if (opcion == null) {
+            opcion = "";
+        }
+        return opcion;
+    }
+
     private static void asignarPais() {
+        int jugadorSeleccionado;
+        String paisSeleccionado;
+        Pais p;
         if (!mundoTEG.esVacio()) {
+            jugadorSeleccionado = mostrarJugadores();
+            if (jugadorSeleccionado != -1) {
+                paisSeleccionado = mostrarPaises();
+                if (!paisSeleccionado.isEmpty()) {
 
-            String paisSeleccionado = mostrarPaises();
-            if (!paisSeleccionado.isEmpty()) {
-                Pais p = (Pais) mundoTEG.recuperarElem(paisSeleccionado);
+                    p = (Pais) mundoTEG.recuperarElem(paisSeleccionado);
 
-                jugador1.getPaisesObtenidos().insertar(p);
-                System.out.println(jugador1.getPaisesObtenidos().toString());
+                    if (!relacion.containsKey(p)) {
+                        p.setFichas(3);
+                        jugadores[jugadorSeleccionado].getPaisesObtenidos().insertar(p);
+                        relacion.put(p, jugadores[jugadorSeleccionado].getNombre());
+                        Ventanas.mostrarMensaje("EXITO",
+                                "El jugador " + jugadores[jugadorSeleccionado].getNombre()
+                                + " ha seleccionado el pais " + p.getNombre());
+                    } else {
+                        Ventanas.mostrarError("Un jugador ya posee este pais");
+                    }
+
+                }
             }
 
         } else {
@@ -325,7 +366,6 @@ public class JuegoJEG {
             if (!paisesVecinos.isEmpty()) {
                 Ventanas.mostrarMensaje("Paises Vecinos", mundoTEG.listarArcos(paisesVecinos).toString());
             }
-
         } else {
             Ventanas.mostrarError(errorMapaVacio);
         }
@@ -343,6 +383,166 @@ public class JuegoJEG {
         } else {
             Ventanas.mostrarError(errorMapaVacio);
         }
+    }
+
+    private static void agregarFichas() {
+        String pais;
+        Pais p;
+        int cantidad;
+        if (!mundoTEG.esVacio()) {
+            pais = mostrarPaises();
+            if (!pais.isEmpty()) {
+                p = (Pais) mundoTEG.recuperarElem(pais);
+                cantidad = leerCantidadFichas(p.getFichas());
+                p.sumarFicha(cantidad);
+                Ventanas.mostrarMensaje("EXITO", "Se han añadido las fichas correctamente\n"
+                        + p.toString() + " tiene ahora " + p.getFichas() + " fichas");
+            }
+
+        } else {
+            Ventanas.mostrarError(errorMapaVacio);
+        }
+    }
+
+    private static int leerCantidadFichas(int fichasActuales) {
+        int cantidad = -1;
+        String cantLeida;
+
+        boolean exito = false;
+        do {
+            // mostrar el menu y leer la opcion
+            cantLeida = Ventanas.leerUnDato("Añadir Fichas", "¿Cuantas fichas desea agregar?(Actuales: " + fichasActuales + ")");
+
+            if (cantLeida != null) {
+                // verificar si es una opcion valida del menu
+                try {
+                    cantidad = Integer.valueOf(cantLeida);
+                    if (cantidad > 0) {
+                        exito = true;
+                    } else {
+                        Ventanas.mostrarError("Debe ser una cantidad positiva.\n Intente de nuevo.");
+                    }
+                } catch (Exception e) {
+                    Ventanas.mostrarError("Debe ingresar un numero.\n Intente de nuevo.");
+                }
+            } else {
+                Ventanas.mostrarError("Debe ingresar un numero.\n Intente de nuevo.");
+            }
+        } while (!exito);
+
+        return cantidad;
+    }
+
+    private static void quitarFichas() {
+        String pais;
+        Pais p;
+        int cantidad;
+        if (!mundoTEG.esVacio()) {
+            pais = mostrarPaises();
+            if (!pais.isEmpty()) {
+                p = (Pais) mundoTEG.recuperarElem(pais);
+                cantidad = leerCantidadFichas(p.getFichas());
+                p.quitarFicha(cantidad);
+                Ventanas.mostrarMensaje("EXITO", "Se han eliminado las fichas correctamente\n"
+                        + p.toString() + " tiene ahora " + p.getFichas() + " fichas");
+            }
+
+        } else {
+            Ventanas.mostrarError(errorMapaVacio);
+        }
+    }
+
+    private static void mostrarEstado() {
+        if (!mundoTEG.esVacio()) {
+            Ventanas.mostrarTexto("MUNDO TEG", mundoTEG.toString(), 50, 25);
+            for (int i = 0; i < jugadores.length; i++) {
+                Ventanas.mostrarTexto("AVL DE JUGADOR " + (i + 1), jugadores[i].getPaisesObtenidos().toString(), 50, 25);
+            }
+            Ventanas.mostrarTexto("MAPEO ", relacion.toString(), 50, 25);
+
+        } else {
+            Ventanas.mostrarError(errorMapaVacio);
+        }
+    }
+
+    private static void crearPacto() {
+        String pais1, pais2;
+        if (!mundoTEG.esVacio()) {
+            pais1 = mostrarPaises();
+            if (!pais1.isEmpty()) {
+                pais2 = mostrarPaisesLimitrofes(pais1);
+                if (!pais2.isEmpty()) {
+                    mundoTEG.eliminarArcoDoble(pais1, pais2);
+                    Ventanas.mostrarMensaje("EXITO", "Se ha eliminado la conexion entre " + pais1 + " y " + pais2);
+                }
+            }
+        } else {
+            Ventanas.mostrarError(errorMapaVacio);
+        }
+    }
+
+    private static String mostrarPaisesLimitrofes(String pais) {
+        String[] opciones = mundoTEG.listarArcos(pais).toArrayString();
+
+        //
+        ArbolAVL orden = new ArbolAVL();
+        for (String option : opciones) {
+            orden.insertar(option);
+        }
+        opciones = orden.listar().toArrayString();
+        //
+
+        String opcion;
+        //mostrar el menu y leer la opcion
+        opcion = Ventanas.pedirUnaOpcion("Menu Principal", "Elija una opcion", opciones);
+        if (opcion == null) {
+            opcion = "";
+        }
+        return opcion;
+    }
+
+    private static void cumplioObjetivo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void vaGanando() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void obtenerAtqConvenientes() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void cantJugadasMinimas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void esPosibleLlegar() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void atacar() {
+        String p1, p2;
+        Pais pais1, pais2;
+
+        if (!mundoTEG.esVacio()) {
+            p1 = mostrarPaises();
+            if (!p1.isEmpty()) {
+
+                p2 = mostrarPaises();
+                if (!p2.isEmpty()) {
+
+                    pais1 = (Pais) mundoTEG.recuperarElem(p1);
+                    pais2 = (Pais) mundoTEG.recuperarElem(p2);
+
+                }
+
+            }
+
+        } else {
+            Ventanas.mostrarError(errorMapaVacio);
+        }
+
     }
 
 }

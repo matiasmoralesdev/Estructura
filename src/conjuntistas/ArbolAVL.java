@@ -173,8 +173,8 @@ public class ArbolAVL {
 
     private NodoAVL rotSimpleIzq(NodoAVL nodo, NodoAVL h, NodoAVL temp) {
         //Rotacion simple a izquierda
-        h.setDerecho(nodo);
-        nodo.setIzquierdo(temp);
+        h.setIzquierdo(nodo);
+        nodo.setDerecho(temp);
 
         nodo.sumarAltura(-2);
 

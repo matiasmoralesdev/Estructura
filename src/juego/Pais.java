@@ -24,7 +24,23 @@ public class Pais implements Comparable {
     }
 
     public void sumarFicha(int n) {
-        this.cantEjercitos += n;
+        this.cantEjercitos += Math.abs(n);
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public void setNombre(String s) {
+        this.nombre = s;
+    }
+
+    public void quitarFicha(int n) {
+        if (this.cantEjercitos < n) {
+            this.cantEjercitos = 0;
+        } else {
+            this.cantEjercitos -= Math.abs(n);
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ public class Jugador {
 
     private String nombre;
     private ArbolAVL paisesObtenidos;
+    //private boolean iniciado;
 
     public Jugador() {
 
@@ -14,8 +15,18 @@ public class Jugador {
     public Jugador(String nombre) {
         this.nombre = nombre;
         this.paisesObtenidos = new ArbolAVL();
+        //   this.iniciado = false;
     }
 
+    /*
+    public void inicializar() {
+        this.iniciado = true;
+    }
+
+    public boolean iniciado() {
+        return this.iniciado;
+    }
+     */
     public String getNombre() {
         return nombre;
     }
