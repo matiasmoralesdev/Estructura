@@ -43,4 +43,9 @@ public class Jugador {
         this.paisesObtenidos = paisesObtenidos;
     }
 
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
+
 }

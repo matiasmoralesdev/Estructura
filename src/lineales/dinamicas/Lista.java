@@ -43,10 +43,9 @@ public class Lista {
      *
      * @param elem Es el elemento comparable que tendra el nuevo nodo creado
      */
-    public void insertarAlFinal(Comparable elem) {
+    public void insertar(Comparable elem) {
         if (esVacia()) {
             this.cabecera = new Nodo(elem);
-
         } else {
             Nodo aux = this.cabecera;
             while (aux.getEnlace() != null) {
@@ -82,7 +81,6 @@ public class Lista {
                 posicion++;
             }
         }
-
         if (!encontrado) {
             posicion = -1;
         }
@@ -111,12 +109,42 @@ public class Lista {
         return exito;
     }
 
+    public Comparable recuperar(int pos) {
+        Comparable respuesta = null;
+        Nodo aux = this.cabecera;
+        int i = 1;
+        while (i <= pos && aux != null) {
+            if (i == pos) {
+                respuesta = aux.getElem();
+            }
+            aux = aux.getEnlace();
+            i++;
+        }
+        return respuesta;
+    }
+
     public boolean esVacia() {
         return this.cabecera == null;
     }
 
     public int longitud() {
         return this.longitud;
+    }
+
+    public Lista clonar() {
+        Lista clon = new Lista();
+        if (!esVacia()) {
+            Nodo aux = this.cabecera;
+            clon.cabecera = new Nodo(this.cabecera.getElem());
+            Nodo auxClon = clon.cabecera;
+            aux = aux.getEnlace();
+            while (aux != null) {
+                auxClon.setEnlace(new Nodo(aux.getElem()));
+                aux = aux.getEnlace();
+                auxClon = auxClon.getEnlace();
+            }
+        }
+        return clon;
     }
 
     public String[] toArrayString() {

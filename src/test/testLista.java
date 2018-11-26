@@ -9,13 +9,14 @@ public class testLista {
         System.out.println(lista.esVacia());
         
         
-        lista.insertarAlFinal("Hola");
-        lista.insertarAlFinal("Chau");
-        lista.insertarAlFinal("Perro");
-        lista.insertarAlFinal("Gato");
-        lista.insertarAlFinal("Caca");
+        lista.insertar("Hola");
+        lista.insertar("Chau");
+        lista.insertar("Perro");
+        lista.insertar("Gato");
+        lista.insertar("Caca");
         
         System.out.println(lista.toString());
+        System.out.println(lista.clonar().toString());
     }
 
 }

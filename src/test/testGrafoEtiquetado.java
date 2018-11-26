@@ -13,12 +13,17 @@ public class testGrafoEtiquetado {
         grafo.insertarVertice(new Pais("Bolivia"));
         grafo.insertarVertice(new Pais("Paraguay"));
         grafo.insertarVertice(new Pais("Canada"));
+        grafo.insertarVertice(new Pais("China"));
+        grafo.insertarVertice(new Pais("Japon"));
         grafo.insertarArcoDoble("Argentina", "Chile", "jajas");
         grafo.insertarArcoDoble("Argentina", "Peru", "jajas");
         grafo.insertarArcoDoble("Argentina", "Canada", "jajas");
         grafo.insertarArcoDoble("Peru", "Chile", "jajas");
         grafo.insertarArcoDoble("Canada", "Bolivia", "jajas");
         grafo.insertarArcoDoble("Paraguay", "Chile", "jajas");
+        grafo.insertarArcoDoble("Japon", "Chile", "jajas");
+        grafo.insertarArcoDoble("China", "Chile", "jajas");
+        grafo.insertarArcoDoble("China", "Japon", "jajas");
 
         System.out.println(grafo.toString());
         System.out.println(grafo.listarEnProfundidad().toString());
@@ -28,7 +33,9 @@ public class testGrafoEtiquetado {
         System.out.println(grafo.toString());
         System.out.println(grafo.listarEnProfundidad().toString());
         System.out.println("-----------------------------");
-        Pais p = (Pais)grafo.recuperarElem("Paraguay");
+        Pais p = (Pais) grafo.recuperarElem("Paraguay");
         System.out.println(p.getFichas());
+        System.out.println(grafo.existeCamino("Argentina", "Japon"));
+        System.out.println("CAMINO MAS CORTO: " + grafo.caminoMasCorto("Argentina", "Japon").toString());
     }
 }

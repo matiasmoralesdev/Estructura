@@ -245,7 +245,7 @@ public class ArbolAVL {
     private void listar(NodoAVL nodo, Lista lista) {
         if (nodo != null) {
             listar(nodo.getIzquierdo(), lista);
-            lista.insertarAlFinal(nodo.getElem());
+            lista.insertar(nodo.getElem());
             listar(nodo.getDerecho(), lista);
         }
     }
@@ -263,7 +263,7 @@ public class ArbolAVL {
                 listarEnRango(nodo.getIzquierdo(), lista, min, max);
             }
             if (actual.compareTo(min) >= 0 && actual.compareTo(max) <= 0) {
-                lista.insertarAlFinal(nodo.getElem());
+                lista.insertar(nodo.getElem());
             }
 
             if (actual.compareTo(max) < 0) {
