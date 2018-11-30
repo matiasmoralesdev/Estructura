@@ -74,4 +74,13 @@ public class Pais implements Comparable {
         return this.nombre;
     }
 
+    @Override
+    public int hashCode() {
+        return nombre.hashCode(); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+    
+    
+    
+
 }

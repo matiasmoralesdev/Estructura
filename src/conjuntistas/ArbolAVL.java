@@ -5,10 +5,12 @@ import lineales.dinamicas.Lista;
 public class ArbolAVL {
 
     private NodoAVL raiz;
+    private int size;
 
     //Constructores
     public ArbolAVL() {
         this.raiz = null;
+        this.size = 0;
     }
 
     public boolean insertar(Comparable elem) {
@@ -18,6 +20,11 @@ public class ArbolAVL {
         } else {
             this.raiz = insertar(elem, this.raiz);
         }
+
+        if (exito) {
+            this.size++;
+        }
+
         return exito;
     }
 
@@ -58,7 +65,9 @@ public class ArbolAVL {
         if (this.raiz != null) {
             this.raiz = eliminar(elem, this.raiz);
         }
-
+        if (exito) {
+            this.size--;
+        }
         return exito;
     }
 
@@ -118,6 +127,10 @@ public class ArbolAVL {
             retorno = nodo;
         }
         return retorno;
+    }
+
+    public int size() {
+        return this.size;
     }
 
     private int balance(NodoAVL nodo) {

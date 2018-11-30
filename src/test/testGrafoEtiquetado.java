@@ -21,8 +21,9 @@ public class testGrafoEtiquetado {
         grafo.insertarArcoDoble("Peru", "Chile", "jajas");
         grafo.insertarArcoDoble("Canada", "Bolivia", "jajas");
         grafo.insertarArcoDoble("Paraguay", "Chile", "jajas");
-        grafo.insertarArcoDoble("Japon", "Chile", "jajas");
+       
         grafo.insertarArcoDoble("China", "Chile", "jajas");
+         grafo.insertarArcoDoble("Japon", "Chile", "jajas");
         grafo.insertarArcoDoble("China", "Japon", "jajas");
 
         System.out.println(grafo.toString());
@@ -33,9 +34,9 @@ public class testGrafoEtiquetado {
         System.out.println(grafo.toString());
         System.out.println(grafo.listarEnProfundidad().toString());
         System.out.println("-----------------------------");
-        Pais p = (Pais) grafo.recuperarElem("Paraguay");
-        System.out.println(p.getFichas());
-        System.out.println(grafo.existeCamino("Argentina", "Japon"));
-        System.out.println("CAMINO MAS CORTO: " + grafo.caminoMasCorto("Argentina", "Japon").toString());
+        Pais p = (Pais) grafo.buscarEnProfundidad("Paraguay");
+        System.out.println(p.toString());
+        System.out.println(grafo.existeCamino("Argentina", "Chile"));
+        System.out.println("CAMINO MAS CORTO: " + grafo.caminoMasCorto("Argentina", "Chile").toString());
     }
 }

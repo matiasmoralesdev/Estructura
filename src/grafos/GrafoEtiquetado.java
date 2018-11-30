@@ -245,11 +245,44 @@ public class GrafoEtiquetado {
         }
     }
 
-    public Comparable recuperarElem(Comparable buscado) {
-        NodoVertice nodo = ubicarVertice(buscado);
+    public Comparable buscarEnProfundidad(Comparable buscado) {
+        Lista visitados = new Lista();
+        NodoVertice aux = this.inicio;
+        Comparable retorno = null;
+        while (aux != null && retorno == null) {
+            if (visitados.localizar(aux.getElem()) < 0) {
+                retorno = buscarEnProfundidad(buscado, aux, visitados);
+            }
+            aux = aux.getSigVertice();
+        }
+        return retorno;
+    }
+
+    private Comparable buscarEnProfundidad(Comparable buscado, NodoVertice nodo, Lista vis) {
         Comparable retorno = null;
         if (nodo != null) {
-            retorno = nodo.getElem();
+            if (nodo.getElem().equals(buscado)) {
+                retorno = nodo.getElem();
+            } else {
+                vis.insertar(nodo.getElem());
+                NodoAdyEti ady = nodo.getPrimerAdy();
+                while (ady != null && retorno == null) {
+                    if (vis.localizar(ady.getVertice().getElem()) < 0) {
+                        retorno = buscarEnProfundidad(buscado, ady.getVertice(), vis);
+                    }
+                    ady = ady.getSigAdyacente();
+                }
+            }
+        }
+        return retorno;
+    }
+
+    public Lista listarVertices() {
+        Lista retorno = new Lista();
+        NodoVertice nodo = this.inicio;
+        while (nodo != null) {
+            retorno.insertarInicio(nodo.getElem());
+            nodo = nodo.getSigVertice();
         }
         return retorno;
     }
@@ -296,31 +329,42 @@ public class GrafoEtiquetado {
 
     public Lista caminoMasCorto(Comparable origen, Comparable destino) {
         Lista lista = new Lista();
+        Lista exito = new Lista();
         NodoVertice auxO = ubicarVertice(origen);
         NodoVertice auxD = ubicarVertice(destino);
         if (auxO != null && auxD != null) {
-            lista = caminoMasCorto(auxO, destino, lista);
+            System.out.println("y aca tambien");
+            exito = caminoMasCorto(auxO, destino, lista, exito);
         }
-        return lista;
+        return exito;
     }
 
-    private Lista caminoMasCorto(NodoVertice n, Comparable dest, Lista vis) {
-        Lista exito = null;
+    private Lista caminoMasCorto(NodoVertice n, Comparable dest, Lista vis, Lista exito) {
         if (n != null) {
             vis.insertar(n.getElem());
             //si vertice n es el destino: HAY CAMINO!
+            System.out.println(vis.toString());
             if (n.getElem().equals(dest)) {
-                exito = vis.clonar();
-                
-                
-                
+
+                if (exito.esVacia()) {
+                    System.out.println("Llego al primer camino");
+                    System.out.println(vis.toString());
+                    exito = vis.clonar();
+
+                } else {
+                    if (exito.longitud() > vis.longitud()) {
+                        System.out.println("Llego a otro  camino");
+                        System.out.println(vis.toString());
+                        exito = vis.clonar();
+                    }
+                }
+
             } else {
                 //si no es el destino verifica si hay camino entre n y destino
                 NodoAdyEti ady = n.getPrimerAdy();
                 while (ady != null) {
-
                     if (vis.localizar(ady.getVertice().getElem()) < 0) {
-                        exito = caminoMasCorto(ady.getVertice(), dest, vis);
+                        exito = caminoMasCorto(ady.getVertice(), dest, vis, exito);
                     }
                     ady = ady.getSigAdyacente();
                 }
