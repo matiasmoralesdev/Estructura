@@ -333,32 +333,26 @@ public class GrafoEtiquetado {
         NodoVertice auxO = ubicarVertice(origen);
         NodoVertice auxD = ubicarVertice(destino);
         if (auxO != null && auxD != null) {
-            System.out.println("y aca tambien");
             exito = caminoMasCorto(auxO, destino, lista, exito);
         }
         return exito;
     }
 
     private Lista caminoMasCorto(NodoVertice n, Comparable dest, Lista vis, Lista exito) {
-        if (n != null) {
-            vis.insertar(n.getElem());
-            //si vertice n es el destino: HAY CAMINO!
-            System.out.println(vis.toString());
+        vis.insertar(n.getElem());
+        if (exito.esVacia() || vis.longitud() < exito.longitud()) {
+
+            //System.out.println(vis.toString());
             if (n.getElem().equals(dest)) {
-
-                if (exito.esVacia()) {
-                    System.out.println("Llego al primer camino");
-                    System.out.println(vis.toString());
-                    exito = vis.clonar();
-
-                } else {
-                    if (exito.longitud() > vis.longitud()) {
-                        System.out.println("Llego a otro  camino");
-                        System.out.println(vis.toString());
-                        exito = vis.clonar();
-                    }
-                }
-
+                exito = vis.clonar();
+                //System.out.println("<<<<<ENCONTRADO " + exito.toString());
+//                if (exito.esVacia()) {
+//                    exito = vis.clonar();
+//                    System.out.println("PRIMER EXITO:" + exito.toString());
+//                } else {
+//                    exito = vis.clonar();
+//                    System.out.println("OTRO EXITO:" + exito.toString());
+//                }
             } else {
                 //si no es el destino verifica si hay camino entre n y destino
                 NodoAdyEti ady = n.getPrimerAdy();
@@ -369,6 +363,7 @@ public class GrafoEtiquetado {
                     ady = ady.getSigAdyacente();
                 }
             }
+
         }
         vis.eliminar(vis.longitud());
         return exito;

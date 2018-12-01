@@ -1,6 +1,7 @@
 package juego;
 
 import conjuntistas.ArbolAVL;
+import java.util.Objects;
 
 public class Jugador {
 
@@ -41,6 +42,33 @@ public class Jugador {
 
     public void setPaisesObtenidos(ArbolAVL paisesObtenidos) {
         this.paisesObtenidos = paisesObtenidos;
+    }
+
+    @Override
+    public int hashCode() {
+        return nombre.hashCode(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Jugador other = (Jugador) obj;
+        if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean equals(Jugador j) {
+        return this.nombre.equals(j.nombre);
     }
 
     @Override

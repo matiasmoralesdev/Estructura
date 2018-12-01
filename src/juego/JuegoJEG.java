@@ -24,6 +24,7 @@ public class JuegoJEG {
     static String[] arrayStringPaises;
     static String errorMapaVacio = "NO HAY UN MAPA CREADO";
     static PrintWriter salida;
+    static boolean mapaCreado = false;
 
     public static void main(String[] args) throws FileNotFoundException {
 
@@ -35,7 +36,7 @@ public class JuegoJEG {
         do {
             opcion = mostrarMenu();
             switch (opcion) {
-                case 0: //1. crearMapa()
+                case 0: //1. crearMapa() //2.AsignarPais(jugador,pais)
                     iniciarMapa();
                     break;
                 case 1: //3. atacar(pais1,pais2)
@@ -51,10 +52,10 @@ public class JuegoJEG {
                     crearPacto();
                     break;
                 case 5: //agregaFichas(pais,cantFichas)
-                    agregarFichas();
+                    modificarFichas(true);
                     break;
                 case 6: //quitaFichas (pais,cantFichas)
-                    quitarFichas();
+                    modificarFichas(false);
                     break;
                 case 7: //cantJugadasMinimas(pais1,pais2)
                     cantJugadasMinimasView();
@@ -75,10 +76,11 @@ public class JuegoJEG {
                     mostrarEstado();
                     break;
                 case 13: //salir()
-                    if (!mundoTEG.esVacio()) {
+                    if (mapaCreado) {
                         salir();
                     }
                     salir = true;
+                    salida.close();
                     break;
                 //default:
             }
@@ -89,30 +91,23 @@ public class JuegoJEG {
     private static void salir() {
         Jugador actual;
         Lista listaPaises;
-        String[] arreglo;
         int contador;
         Pais p;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < jugadores.length; i++) {
             contador = 0;
             actual = jugadores[i];
-
             salida.println();
             salida.println("> JUGADOR " + i + " : " + actual.getNombre());
-
             listaPaises = actual.getPaisesObtenidos().listar();
-
             salida.println("> Distribucion de paises: " + listaPaises.toString());
-
-            arreglo = listaPaises.toArrayString();
-            for (String pais : arreglo) {
-                p = (Pais) mundoTEG.buscarEnProfundidad(pais);
-                contador += p.cantEjercitos;
+            for (int j = 1; j < listaPaises.longitud(); j++) {
+                p = (Pais) listaPaises.recuperar(j);
+                contador += p.getFichas();
             }
             salida.println("> Cantidad total de ejercitos: " + contador);
             salida.println();
         }
 
-        salida.close();
     }
 
     //MENUS DE SELECCION
@@ -186,15 +181,6 @@ public class JuegoJEG {
 
     private static String mostrarPaisesLimitrofes(String pais) {
         String[] opciones = mundoTEG.listarArcos(pais).toArrayString();
-
-        //
-        ArbolAVL orden = new ArbolAVL();
-        for (String option : opciones) {
-            orden.insertar(option);
-        }
-        opciones = orden.listar().toArrayString();
-        //
-
         String opcion;
         //mostrar el menu y leer la opcion
         opcion = Ventanas.pedirUnaOpcion("Paises Limitrofes de" + pais, "Elija una opcion", opciones);
@@ -264,11 +250,11 @@ public class JuegoJEG {
 
     //CREAR MAPA
     private static void iniciarMapa() {
-        if (mundoTEG.esVacio()) {
-            mundoTEG = crearMapa();
+        if (!mapaCreado) {
+            crearMapa();
             crearJugadores();
-            listaPaises = mundoTEG.listarVertices();
             asignarJugadores();
+            mapaCreado = true;
             Ventanas.mostrarMensaje("Mapa Creado", "El mapa se ha creado correctamente! ");
         } else {
             Ventanas.mostrarError("Ya existe un mapa creado!");
@@ -352,143 +338,250 @@ public class JuegoJEG {
         Ventanas.mostrarMensaje("Orden de jugadas", "El orden de jugadores es: \n" + cadena);
     }
 
-    private static GrafoEtiquetado crearMapa() {
-        GrafoEtiquetado mundo = new GrafoEtiquetado();
-        mundo.insertarVertice(new Pais("ARGENTINA"));
-        mundo.insertarVertice(new Pais("CHILE"));
-        mundo.insertarVertice(new Pais("URUGUAY"));
-        mundo.insertarVertice(new Pais("BRASIL"));
-        mundo.insertarVertice(new Pais("PERU"));
-        mundo.insertarVertice(new Pais("COLOMBIA"));
-        mundo.insertarVertice(new Pais("MEXICO"));
-        mundo.insertarVertice(new Pais("CALIFORNIA"));
-        mundo.insertarVertice(new Pais("CANADA"));
-        mundo.insertarVertice(new Pais("OREGON"));
-        mundo.insertarVertice(new Pais("YUKON"));
-        mundo.insertarVertice(new Pais("ALASKA"));
-        mundo.insertarVertice(new Pais("NUEVA YORK"));
-        mundo.insertarVertice(new Pais("TERRANOVA"));
-        mundo.insertarVertice(new Pais("LABRADOR"));
-        mundo.insertarVertice(new Pais("GROENLANDIA"));
-        mundo.insertarVertice(new Pais("ISLANDIA"));
-        mundo.insertarVertice(new Pais("GRAN BRETAÑA"));
-        mundo.insertarVertice(new Pais("ESPAÑA"));
-        mundo.insertarVertice(new Pais("FRANCIA"));
-        mundo.insertarVertice(new Pais("ALEMANIA"));
-        mundo.insertarVertice(new Pais("ITALIA"));
-        mundo.insertarVertice(new Pais("POLONIA"));
-        mundo.insertarVertice(new Pais("RUSIA"));
-        mundo.insertarVertice(new Pais("SUECIA"));
-        mundo.insertarVertice(new Pais("IRAN"));
-        mundo.insertarVertice(new Pais("TURQUIA"));
-        mundo.insertarVertice(new Pais("ISRAEL"));
-        mundo.insertarVertice(new Pais("ARABIA"));
-        mundo.insertarVertice(new Pais("ARAL"));
-        mundo.insertarVertice(new Pais("TARTARIA"));
-        mundo.insertarVertice(new Pais("TAMIR"));
-        mundo.insertarVertice(new Pais("SIBERIA"));
-        mundo.insertarVertice(new Pais("MONGOLIA"));
-        mundo.insertarVertice(new Pais("GOBI"));
-        mundo.insertarVertice(new Pais("CHINA"));
-        mundo.insertarVertice(new Pais("MALASIA"));
-        mundo.insertarVertice(new Pais("JAPON"));
-        mundo.insertarVertice(new Pais("KAMCHATKA"));
-        mundo.insertarVertice(new Pais("INDIA"));
-        mundo.insertarVertice(new Pais("SUMATRA"));
-        mundo.insertarVertice(new Pais("BORNEO"));
-        mundo.insertarVertice(new Pais("JAVA"));
-        mundo.insertarVertice(new Pais("AUSTRALIA"));
-        mundo.insertarVertice(new Pais("SAHARA"));
-        mundo.insertarVertice(new Pais("EGIPTO"));
-        mundo.insertarVertice(new Pais("ETIOPIA"));
-        mundo.insertarVertice(new Pais("ZAIRE"));
-        mundo.insertarVertice(new Pais("SUDAFRICA"));
-        mundo.insertarVertice(new Pais("MADAGASCAR"));
-        mundo.insertarArcoDoble("ARGENTINA", "CHILE", "FRONTERA");
-        mundo.insertarArcoDoble("ARGENTINA", "URUGUAY", "FRONTERA");
-        mundo.insertarArcoDoble("ARGENTINA", "BRASIL", "FRONTERA");
-        mundo.insertarArcoDoble("ARGENTINA", "PERU", "FRONTERA");
-        mundo.insertarArcoDoble("CHILE", "PERU", "FRONTERA");
-        mundo.insertarArcoDoble("CHILE", "AUSTRALIA", "PUENTE");
-        mundo.insertarArcoDoble("PERU", "COLOMBIA", "FRONTERA");
-        mundo.insertarArcoDoble("PERU", "BRASIL", "FRONTERA");
-        mundo.insertarArcoDoble("URUGUAY", "BRASIL", "FRONTERA");
-        mundo.insertarArcoDoble("BRASIL", "COLOMBIA", "FRONTERA");
-        mundo.insertarArcoDoble("BRASIL", "SAHARA", "PUENTE");
-        mundo.insertarArcoDoble("COLOMBIA", "MEXICO", "FRONTERA");
-        mundo.insertarArcoDoble("MEXICO", "CALIFORNIA", "FRONTERA");
-        mundo.insertarArcoDoble("CALIFORNIA", "OREGON", "FRONTERA");
-        mundo.insertarArcoDoble("CALIFORNIA", "NUEVA YORK", "FRONTERA");
-        mundo.insertarArcoDoble("OREGON", "ALASKA", "FRONTERA");
-        mundo.insertarArcoDoble("OREGON", "YUKON", "FRONTERA");
-        mundo.insertarArcoDoble("OREGON", "CANADA", "FRONTERA");
-        mundo.insertarArcoDoble("OREGON", "NUEVA YORK", "FRONTERA");
-        mundo.insertarArcoDoble("ALASKA", "YUKON", "FRONTERA");
-        mundo.insertarArcoDoble("ALASKA", "KAMCHATKA", "PUENTE");
-        mundo.insertarArcoDoble("YUKON", "CANADA", "FRONTERA");
-        mundo.insertarArcoDoble("CANADA", "NUEVA YORK", "FRONTERA");
-        mundo.insertarArcoDoble("NUEVA YORK", "TERRANOVA", "FRONTERA");
-        mundo.insertarArcoDoble("NUEVA YORK", "GROENLANDIA", "PUENTE");
-        mundo.insertarArcoDoble("TERRANOVA", "LABRADOR", "FRONTERA");
-        mundo.insertarArcoDoble("LABRADOR", "GROENLANDIA", "PUENTE");
-        mundo.insertarArcoDoble("GROENLANDIA", "ISLANDIA", "PUENTE");
-        mundo.insertarArcoDoble("ISLANDIA", "SUECIA", "PUENTE");
-        mundo.insertarArcoDoble("ISLANDIA", "GRAN BRETAÑA", "PUENTE");
-        mundo.insertarArcoDoble("GRAN BRETAÑA", "ESPAÑA", "PUENTE");
-        mundo.insertarArcoDoble("GRAN BRETAÑA", "ALEMANIA", "PUENTE");
-        mundo.insertarArcoDoble("ESPAÑA", "SAHARA", "PUENTE");
-        mundo.insertarArcoDoble("ESPAÑA", "FRANCIA", "FRONTERA");
-        mundo.insertarArcoDoble("FRANCIA", "ITALIA", "FRONTERA");
-        mundo.insertarArcoDoble("FRANCIA", "ALEMANIA", "FRONTERA");
-        mundo.insertarArcoDoble("ITALIA", "ALEMANIA", "FRONTERA");
-        mundo.insertarArcoDoble("ALEMANIA", "POLONIA", "FRONTERA");
-        mundo.insertarArcoDoble("POLONIA", "RUSIA", "FRONTERA");
-        mundo.insertarArcoDoble("POLONIA", "EGIPTO", "PUENTE");
-        mundo.insertarArcoDoble("RUSIA", "SUECIA", "FRONTERA");
-        mundo.insertarArcoDoble("RUSIA", "ARAL", "FRONTERA");
-        mundo.insertarArcoDoble("RUSIA", "IRAN", "FRONTERA");
-        mundo.insertarArcoDoble("RUSIA", "TURQUIA", "FRONTERA");
-        mundo.insertarArcoDoble("ARAL", "TARTARIA", "FRONTERA");
-        mundo.insertarArcoDoble("ARAL", "SIBERIA", "FRONTERA");
-        mundo.insertarArcoDoble("ARAL", "IRAN", "FRONTERA");
-        mundo.insertarArcoDoble("ARAL", "MONGOLIA", "FRONTERA");
-        mundo.insertarArcoDoble("TARTARIA", "TAMIR", "FRONTERA");
-        mundo.insertarArcoDoble("TARTARIA", "SIBERIA", "FRONTERA");
-        mundo.insertarArcoDoble("TAMIR", "SIBERIA", "FRONTERA");
-        mundo.insertarArcoDoble("SIBERIA", "KAMCHATKA", "FRONTERA");
-        mundo.insertarArcoDoble("SIBERIA", "MONGOLIA", "FRONTERA");
-        mundo.insertarArcoDoble("SIBERIA", "CHINA", "FRONTERA");
-        mundo.insertarArcoDoble("KAMCHATKA", "CHINA", "FRONTERA");
-        mundo.insertarArcoDoble("KAMCHATKA", "JAPON", "PUENTE");
-        mundo.insertarArcoDoble("CHINA", "JAPON", "PUENTE");
-        mundo.insertarArcoDoble("CHINA", "GOBI", "FRONTERA");
-        mundo.insertarArcoDoble("CHINA", "MALASIA", "FRONTERA");
-        mundo.insertarArcoDoble("CHINA", "INDIA", "FRONTERA");
-        mundo.insertarArcoDoble("CHINA", "MONGOLIA", "FRONTERA");
-        mundo.insertarArcoDoble("CHINA", "IRAN", "FRONTERA");
-        mundo.insertarArcoDoble("MONGOLIA", "GOBI", "FRONTERA");
-        mundo.insertarArcoDoble("IRAN", "GOBI", "FRONTERA");
-        mundo.insertarArcoDoble("IRAN", "TURQUIA", "FRONTERA");
-        mundo.insertarArcoDoble("TURQUIA", "ISRAEL", "FRONTERA");
-        mundo.insertarArcoDoble("TURQUIA", "ARABIA", "FRONTERA");
-        mundo.insertarArcoDoble("TURQUIA", "EGIPTO", "PUENTE");
-        mundo.insertarArcoDoble("ISRAEL", "EGIPTO", "PUENTE");
-        mundo.insertarArcoDoble("ISRAEL", "ARABIA", "FRONTERA");
-        mundo.insertarArcoDoble("INDIA", "SUMATRA", "PUENTE");
-        mundo.insertarArcoDoble("MALASIA", "BORNEO", "PUENTE");
-        mundo.insertarArcoDoble("SUMATRA", "AUSTRALIA", "PUENTE");
-        mundo.insertarArcoDoble("BORNEO", "AUSTRALIA", "PUENTE");
-        mundo.insertarArcoDoble("JAVA", "AUSTRALIA", "PUENTE");
-        mundo.insertarArcoDoble("EGIPTO", "ETIOPIA", "FRONTERA");
-        mundo.insertarArcoDoble("EGIPTO", "SAHARA", "FRONTERA");
-        mundo.insertarArcoDoble("EGIPTO", "MADAGASCAR", "PUENTE");
-        mundo.insertarArcoDoble("ETIOPIA", "SAHARA", "FRONTERA");
-        mundo.insertarArcoDoble("ETIOPIA", "ZAIRE", "FRONTERA");
-        mundo.insertarArcoDoble("ETIOPIA", "SUDAFRICA", "FRONTERA");
-        mundo.insertarArcoDoble("ZAIRE", "SAHARA", "FRONTERA");
-        mundo.insertarArcoDoble("ZAIRE", "SUDAFRICA", "FRONTERA");
-        mundo.insertarArcoDoble("ZAIRE", "MADAGASCAR", "PUENTE");
-        return mundo;
+    private static void crearMapa() {
+        ArbolAVL arbolOrden = new ArbolAVL();
+
+        Pais argentina = new Pais("ARGENTINA");
+        Pais chile = new Pais("CHILE");
+        Pais uruguay = new Pais("URUGUAY");
+        Pais brasil = new Pais("BRASIL");
+        Pais peru = new Pais("PERU");
+        Pais colombia = new Pais("COLOMBIA");
+        Pais mexico = new Pais("MEXICO");
+        Pais california = new Pais("CALIFORNA");
+        Pais oregon = new Pais("OREGON");
+        Pais yukon = new Pais("YUKON");
+        Pais alaska = new Pais("ALASKA");
+        Pais nuevaYork = new Pais("NUEVA YORK");
+        Pais terranova = new Pais("TERRANOVA");
+        Pais labrador = new Pais("LABRADOR");
+        Pais groenlandia = new Pais("GROENLANDIA");
+        Pais islandia = new Pais("ISLANDIA");
+        Pais granBretania = new Pais("GRAN BRETAÑA");
+        Pais espania = new Pais("ESPAÑA");
+        Pais francia = new Pais("FRANCIA");
+        Pais alemania = new Pais("ALEMANIA");
+        Pais italia = new Pais("ITALIA");
+        Pais polonia = new Pais("POLONIA");
+        Pais rusia = new Pais("RUSIA");
+        Pais suecia = new Pais("SUECIA");
+        Pais iran = new Pais("IRAN");
+        Pais turquia = new Pais("TURQUIA");
+        Pais israel = new Pais("ISRAEL");
+        Pais arabia = new Pais("ARABIA");
+        Pais aral = new Pais("ARAL");
+        Pais tartaria = new Pais("TARTARIA");
+        Pais tamir = new Pais("TAMIR");
+        Pais siberia = new Pais("SIBERIA");
+        Pais mongolia = new Pais("MONGOLIA");
+        Pais gobi = new Pais("GOBI");
+        Pais china = new Pais("CHINA");
+        Pais malasia = new Pais("MALASIA");
+        Pais japon = new Pais("JAPON");
+        Pais kamchatka = new Pais("KAMCHATKA");
+        Pais india = new Pais("INDIA");
+        Pais sumatra = new Pais("SUMATRA");
+        Pais borneo = new Pais("BORNEO");
+        Pais java = new Pais("JAVA");
+        Pais australia = new Pais("AUSTRALIA");
+        Pais sahara = new Pais("SAHARA");
+        Pais egipto = new Pais("EGIPTO");
+        Pais etiopia = new Pais("ETIOPIA");
+        Pais zaire = new Pais("ZAIRE");
+        Pais sudafrica = new Pais("SUDAFRICA");
+        Pais madagascar = new Pais("MADAGASCAR");
+        Pais canada = new Pais("CANADA");
+
+        mundoTEG.insertarVertice(argentina);
+        mundoTEG.insertarVertice(chile);
+        mundoTEG.insertarVertice(uruguay);
+        mundoTEG.insertarVertice(brasil);
+        mundoTEG.insertarVertice(peru);
+        mundoTEG.insertarVertice(colombia);
+        mundoTEG.insertarVertice(mexico);
+        mundoTEG.insertarVertice(california);
+        mundoTEG.insertarVertice(canada);
+        mundoTEG.insertarVertice(oregon);
+        mundoTEG.insertarVertice(yukon);
+        mundoTEG.insertarVertice(alaska);
+        mundoTEG.insertarVertice(nuevaYork);
+        mundoTEG.insertarVertice(terranova);
+        mundoTEG.insertarVertice(labrador);
+        mundoTEG.insertarVertice(groenlandia);
+        mundoTEG.insertarVertice(islandia);
+        mundoTEG.insertarVertice(granBretania);
+        mundoTEG.insertarVertice(espania);
+        mundoTEG.insertarVertice(francia);
+        mundoTEG.insertarVertice(alemania);
+        mundoTEG.insertarVertice(italia);
+        mundoTEG.insertarVertice(polonia);
+        mundoTEG.insertarVertice(rusia);
+        mundoTEG.insertarVertice(suecia);
+        mundoTEG.insertarVertice(iran);
+        mundoTEG.insertarVertice(turquia);
+        mundoTEG.insertarVertice(israel);
+        mundoTEG.insertarVertice(arabia);
+        mundoTEG.insertarVertice(aral);
+        mundoTEG.insertarVertice(tartaria);
+        mundoTEG.insertarVertice(tamir);
+        mundoTEG.insertarVertice(siberia);
+        mundoTEG.insertarVertice(mongolia);
+        mundoTEG.insertarVertice(gobi);
+        mundoTEG.insertarVertice(china);
+        mundoTEG.insertarVertice(malasia);
+        mundoTEG.insertarVertice(japon);
+        mundoTEG.insertarVertice(kamchatka);
+        mundoTEG.insertarVertice(india);
+        mundoTEG.insertarVertice(sumatra);
+        mundoTEG.insertarVertice(borneo);
+        mundoTEG.insertarVertice(java);
+        mundoTEG.insertarVertice(australia);
+        mundoTEG.insertarVertice(sahara);
+        mundoTEG.insertarVertice(egipto);
+        mundoTEG.insertarVertice(etiopia);
+        mundoTEG.insertarVertice(zaire);
+        mundoTEG.insertarVertice(sudafrica);
+        mundoTEG.insertarVertice(madagascar);
+
+        arbolOrden.insertar(argentina);
+        arbolOrden.insertar(chile);
+        arbolOrden.insertar(uruguay);
+        arbolOrden.insertar(brasil);
+        arbolOrden.insertar(peru);
+        arbolOrden.insertar(colombia);
+        arbolOrden.insertar(mexico);
+        arbolOrden.insertar(california);
+        arbolOrden.insertar(canada);
+        arbolOrden.insertar(oregon);
+        arbolOrden.insertar(yukon);
+        arbolOrden.insertar(alaska);
+        arbolOrden.insertar(nuevaYork);
+        arbolOrden.insertar(terranova);
+        arbolOrden.insertar(labrador);
+        arbolOrden.insertar(groenlandia);
+        arbolOrden.insertar(islandia);
+        arbolOrden.insertar(granBretania);
+        arbolOrden.insertar(espania);
+        arbolOrden.insertar(francia);
+        arbolOrden.insertar(alemania);
+        arbolOrden.insertar(italia);
+        arbolOrden.insertar(polonia);
+        arbolOrden.insertar(rusia);
+        arbolOrden.insertar(suecia);
+        arbolOrden.insertar(iran);
+        arbolOrden.insertar(turquia);
+        arbolOrden.insertar(israel);
+        arbolOrden.insertar(arabia);
+        arbolOrden.insertar(aral);
+        arbolOrden.insertar(tartaria);
+        arbolOrden.insertar(tamir);
+        arbolOrden.insertar(siberia);
+        arbolOrden.insertar(mongolia);
+        arbolOrden.insertar(gobi);
+        arbolOrden.insertar(china);
+        arbolOrden.insertar(malasia);
+        arbolOrden.insertar(japon);
+        arbolOrden.insertar(kamchatka);
+        arbolOrden.insertar(india);
+        arbolOrden.insertar(sumatra);
+        arbolOrden.insertar(borneo);
+        arbolOrden.insertar(java);
+        arbolOrden.insertar(australia);
+        arbolOrden.insertar(sahara);
+        arbolOrden.insertar(egipto);
+        arbolOrden.insertar(etiopia);
+        arbolOrden.insertar(zaire);
+        arbolOrden.insertar(sudafrica);
+        arbolOrden.insertar(madagascar);
+
+        mundoTEG.insertarArcoDoble("ARGENTINA", "CHILE", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARGENTINA", "URUGUAY", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARGENTINA", "BRASIL", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARGENTINA", "PERU", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHILE", "PERU", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHILE", "AUSTRALIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("PERU", "COLOMBIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("PERU", "BRASIL", "FRONTERA");
+        mundoTEG.insertarArcoDoble("URUGUAY", "BRASIL", "FRONTERA");
+        mundoTEG.insertarArcoDoble("BRASIL", "COLOMBIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("BRASIL", "SAHARA", "PUENTE");
+        mundoTEG.insertarArcoDoble("COLOMBIA", "MEXICO", "FRONTERA");
+        mundoTEG.insertarArcoDoble("MEXICO", "CALIFORNIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CALIFORNIA", "OREGON", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CALIFORNIA", "NUEVA YORK", "FRONTERA");
+        mundoTEG.insertarArcoDoble("OREGON", "ALASKA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("OREGON", "YUKON", "FRONTERA");
+        mundoTEG.insertarArcoDoble("OREGON", "CANADA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("OREGON", "NUEVA YORK", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ALASKA", "YUKON", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ALASKA", "KAMCHATKA", "PUENTE");
+        mundoTEG.insertarArcoDoble("YUKON", "CANADA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CANADA", "NUEVA YORK", "FRONTERA");
+        mundoTEG.insertarArcoDoble("NUEVA YORK", "TERRANOVA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("NUEVA YORK", "GROENLANDIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("TERRANOVA", "LABRADOR", "FRONTERA");
+        mundoTEG.insertarArcoDoble("LABRADOR", "GROENLANDIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("GROENLANDIA", "ISLANDIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("ISLANDIA", "SUECIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("ISLANDIA", "GRAN BRETAÑA", "PUENTE");
+        mundoTEG.insertarArcoDoble("GRAN BRETAÑA", "ESPAÑA", "PUENTE");
+        mundoTEG.insertarArcoDoble("GRAN BRETAÑA", "ALEMANIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("ESPAÑA", "SAHARA", "PUENTE");
+        mundoTEG.insertarArcoDoble("ESPAÑA", "FRANCIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("FRANCIA", "ITALIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("FRANCIA", "ALEMANIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ITALIA", "ALEMANIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ALEMANIA", "POLONIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("POLONIA", "RUSIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("POLONIA", "EGIPTO", "PUENTE");
+        mundoTEG.insertarArcoDoble("RUSIA", "SUECIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("RUSIA", "ARAL", "FRONTERA");
+        mundoTEG.insertarArcoDoble("RUSIA", "IRAN", "FRONTERA");
+        mundoTEG.insertarArcoDoble("RUSIA", "TURQUIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARAL", "TARTARIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARAL", "SIBERIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARAL", "IRAN", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ARAL", "MONGOLIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TARTARIA", "TAMIR", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TARTARIA", "SIBERIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TAMIR", "SIBERIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("SIBERIA", "KAMCHATKA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("SIBERIA", "MONGOLIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("SIBERIA", "CHINA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("KAMCHATKA", "CHINA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("KAMCHATKA", "JAPON", "PUENTE");
+        mundoTEG.insertarArcoDoble("CHINA", "JAPON", "PUENTE");
+        mundoTEG.insertarArcoDoble("CHINA", "GOBI", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHINA", "MALASIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHINA", "INDIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHINA", "MONGOLIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("CHINA", "IRAN", "FRONTERA");
+        mundoTEG.insertarArcoDoble("MONGOLIA", "GOBI", "FRONTERA");
+        mundoTEG.insertarArcoDoble("IRAN", "GOBI", "FRONTERA");
+        mundoTEG.insertarArcoDoble("IRAN", "TURQUIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TURQUIA", "ISRAEL", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TURQUIA", "ARABIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("TURQUIA", "EGIPTO", "PUENTE");
+        mundoTEG.insertarArcoDoble("ISRAEL", "EGIPTO", "PUENTE");
+        mundoTEG.insertarArcoDoble("ISRAEL", "ARABIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("INDIA", "SUMATRA", "PUENTE");
+        mundoTEG.insertarArcoDoble("MALASIA", "BORNEO", "PUENTE");
+        mundoTEG.insertarArcoDoble("SUMATRA", "AUSTRALIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("BORNEO", "AUSTRALIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("JAVA", "AUSTRALIA", "PUENTE");
+        mundoTEG.insertarArcoDoble("EGIPTO", "ETIOPIA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("EGIPTO", "SAHARA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("EGIPTO", "MADAGASCAR", "PUENTE");
+        mundoTEG.insertarArcoDoble("ETIOPIA", "SAHARA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ETIOPIA", "ZAIRE", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ETIOPIA", "SUDAFRICA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ZAIRE", "SAHARA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ZAIRE", "SUDAFRICA", "FRONTERA");
+        mundoTEG.insertarArcoDoble("ZAIRE", "MADAGASCAR", "PUENTE");
+
+        listaPaises = arbolOrden.listar();
+        arrayStringPaises = listaPaises.toArrayString();
+
     }
 
     private static void asignarJugadores() {
@@ -504,7 +597,7 @@ public class JuegoJEG {
 
     public static boolean asignarPais(int jugador, Pais pais) {
         boolean exito = false;
-        if (!relacion.containsKey(pais)) {
+        if (!relacion.containsKey(pais.getNombre())) {
             pais.setFichas(3);
             jugadores[jugador].getPaisesObtenidos().insertar(pais);
             relacion.put(pais.getNombre(), jugadores[jugador]);
@@ -518,45 +611,61 @@ public class JuegoJEG {
         String p1, p2;
         Pais pais1, pais2;
         int dado1, dado2;
-        Jugador j1, j2;
-        if (!mundoTEG.esVacio()) {
+        Jugador jugador1, jugador2;
+        if (mapaCreado) {
             p1 = mostrarPaises();
-            pais1 = (Pais) mundoTEG.buscarEnProfundidad(p1);
-            j1 = (Jugador) relacion.get(pais1);
             if (!p1.isEmpty()) {
+                jugador1 = (Jugador) relacion.get(p1);
+                pais1 = (Pais) jugador1.getPaisesObtenidos().recuperar(p1);
                 if (pais1.getFichas() > 1) {
                     p2 = mostrarPaisesLimitrofes(p1);
-                    pais2 = (Pais) mundoTEG.buscarEnProfundidad(p2);
-                    j2 = (Jugador) relacion.get(pais2);
+
                     if (!p2.isEmpty()) {
-                        if (!j1.getNombre().equals(j2.getNombre())) {
+                        jugador2 = (Jugador) relacion.get(p2);
+                        pais2 = (Pais) jugador2.getPaisesObtenidos().recuperar(p2);
+
+                        if (!jugador1.getNombre().equals(jugador2.getNombre())) {
                             dado1 = new Random().nextInt(6) + 1;
                             dado2 = new Random().nextInt(6) + 1;
-                            Ventanas.mostrarMensaje("DADOS", "JUGADOR " + j1.getNombre() + " - DADO: " + dado1
-                                    + "\nJUGADOR " + j2.getNombre() + " - DADO: " + dado2);
+                            Ventanas.mostrarMensaje("DADOS", "JUGADOR " + jugador1.getNombre() + " - DADO: " + dado1
+                                    + "\nJUGADOR " + jugador2.getNombre() + " - DADO: " + dado2);
                             if (dado1 > dado2) {
                                 pais2.quitarFicha(1);
                                 Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " ataco con exito a " + p2);
 
                                 //Salida a archivo
-                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + j1.getNombre() + " ATACO A"
-                                        + pais2.getNombre() + " perteneciente a " + j2.getNombre() + "con resultado EXITOSO");
+                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A"
+                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + "con resultado EXITOSO");
+                                //
 
                                 if (pais2.getFichas() == 0) {
-                                    relacion.replace(pais2.getNombre(), j1);
+                                    relacion.replace(pais2.getNombre(), jugador1);
                                     pais2.sumarFicha(1);
-                                    j1.getPaisesObtenidos().insertar(pais2);
+                                    jugador1.getPaisesObtenidos().insertar(pais2);
+                                    jugador2.getPaisesObtenidos().eliminar(pais2);
 
                                     //Salida a archivo
-                                    salida.println("% El jugador" + j1.getNombre() + " Conquisto " + pais2.getNombre());
+                                    salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
+                                    //
+
                                 }
                             } else {
                                 pais1.quitarFicha(1);
                                 Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " fallo el ataque a " + p2);
                                 //Salida a archivo
-                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + j1.getNombre() + " ATACO A"
-                                        + pais2.getNombre() + " perteneciente a " + j2.getNombre() + "con resultado FALIIDO");
+                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A"
+                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + "con resultado FALIIDO");
 
+                                if (pais1.getFichas() == 0) {
+                                    relacion.replace(pais1.getNombre(), jugador2);
+                                    pais2.sumarFicha(1);
+                                    jugador2.getPaisesObtenidos().insertar(pais1);
+                                    jugador1.getPaisesObtenidos().eliminar(pais1);
+
+                                    //Salida a archivo
+                                    salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
+                                    //
+                                }
                             }
                         } else {
                             Ventanas.mostrarError("No se puede atacar un pais propio");
@@ -571,14 +680,14 @@ public class JuegoJEG {
         }
 
     }
-
     //OBTENER CANTIDAD DE PAISES
+
     private static void obtenerCantPaises() {
         int respuesta;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             int jugadorElegido = mostrarJugadores();
             if (jugadorElegido > -1 && jugadorElegido < 3) {
-                respuesta = jugadores[jugadorElegido].getPaisesObtenidos().listar().longitud();
+                respuesta = jugadores[jugadorElegido].getPaisesObtenidos().size();
                 Ventanas.mostrarMensaje("Cantidad de paises",
                         "El jugador " + jugadores[jugadorElegido].getNombre() + " tiene " + respuesta + " paises");
             }
@@ -589,10 +698,10 @@ public class JuegoJEG {
 
     //OBTENER VECINOS
     private static void obtenerVecinos() {
-        if (!mundoTEG.esVacio()) {
-            String paisesVecinos = mostrarPaises();
-            if (!paisesVecinos.isEmpty()) {
-                Ventanas.mostrarMensaje("Paises Vecinos", mundoTEG.listarArcos(paisesVecinos).toString());
+        if (mapaCreado) {
+            String pais = mostrarPaises();
+            if (!pais.isEmpty()) {
+                Ventanas.mostrarMensaje("Paises Vecinos", mundoTEG.listarArcos(pais).toString());
             }
         } else {
             Ventanas.mostrarError(errorMapaVacio);
@@ -602,7 +711,7 @@ public class JuegoJEG {
     //CREAR PACTO
     private static void crearPacto() {
         String pais1, pais2;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             pais1 = mostrarPaises();
             if (!pais1.isEmpty()) {
                 pais2 = mostrarPaisesLimitrofes(pais1);
@@ -616,18 +725,24 @@ public class JuegoJEG {
         }
     }
 
-    //AGREGAR FICHAS
-    private static void agregarFichas() {
-        String pais;
+    //AGREGAR Y ELIMINAR FICHAS
+    private static void modificarFichas(boolean valor) {
+        String pais, palabra;
         Pais p;
         int cantidad;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             pais = mostrarPaises();
             if (!pais.isEmpty()) {
-                p = (Pais) mundoTEG.buscarEnProfundidad(pais);
-                cantidad = leerCantidadFichas(true, p.getFichas());
-                p.sumarFicha(cantidad);
-                Ventanas.mostrarMensaje("EXITO", "Se han añadido las fichas correctamente\n"
+                p = obtenerPais(pais);
+                cantidad = leerCantidadFichas(valor, p.getFichas());
+                if (valor) {
+                    p.sumarFicha(cantidad);
+                    palabra = "añadido";
+                } else {
+                    p.quitarFicha(cantidad);
+                    palabra = "eliminado";
+                }
+                Ventanas.mostrarMensaje("EXITO", "Se han " + palabra + " las fichas correctamente\n"
                         + p.toString() + " tiene ahora " + p.getFichas() + " fichas");
             }
         } else {
@@ -635,37 +750,29 @@ public class JuegoJEG {
         }
     }
 
-    // QUITAR FICHAS
-    private static void quitarFichas() {
-        String pais;
-        Pais p;
-        int cantidad;
-        if (!mundoTEG.esVacio()) {
-            pais = mostrarPaises();
-            if (!pais.isEmpty()) {
-                p = (Pais) mundoTEG.buscarEnProfundidad(pais);
-                cantidad = leerCantidadFichas(false, p.getFichas());
-                p.quitarFicha(cantidad);
-                Ventanas.mostrarMensaje("EXITO", "Se han eliminado las fichas correctamente\n"
-                        + p.toString() + " tiene ahora " + p.getFichas() + " fichas");
+    private static Pais obtenerPais(String p) {
+        int i = 0;
+        boolean encontrado = false;
+        Pais pais = null;
+        while (i < jugadores.length && !encontrado) {
+            pais = (Pais) jugadores[i].getPaisesObtenidos().recuperar(pais);
+            if (pais != null) {
+                encontrado = true;
             }
-        } else {
-            Ventanas.mostrarError(errorMapaVacio);
+            i++;
         }
+        return pais;
     }
 
     //CANTIDAD DE JUGADAS MINIMAS
     private static void cantJugadasMinimasView() {
-
         String p1, p2;
         Pais pais1, pais2;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
                 p2 = mostrarPaises();
                 if (!p2.isEmpty()) {
-                    //pais1 = (Pais) mundoTEG.
-                    System.out.println("Entro aca");
                     int respuesta = cantJugadasMinimas(p1, p2);
                     Ventanas.mostrarMensaje("Minimas Jugadas", "La cantidad minimas de jugadas necesarias es: " + respuesta);
                 }
@@ -677,10 +784,8 @@ public class JuegoJEG {
 
     public static int cantJugadasMinimas(String pais1, String pais2) {
         Lista camino;
-        int respuesta;
         camino = mundoTEG.caminoMasCorto(pais1, pais2);
-        respuesta = camino.longitud();
-        return respuesta;
+        return camino.longitud()-1;
     }
 
     //ES POSIBLE LLEGAR
@@ -688,7 +793,7 @@ public class JuegoJEG {
         String p1, p2;
         int k, respuesta;
         Pais pais1, pais2;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
                 p2 = mostrarPaises();
@@ -710,7 +815,7 @@ public class JuegoJEG {
 
     //OBTENER ATAQUES CONVENIENTES
     private static void obtenerAtqConvenientesView() {
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             int jugador = mostrarJugadores();
             if (jugador != -1) {
                 Jugador j1 = jugadores[jugador];
@@ -735,22 +840,16 @@ public class JuegoJEG {
         Lista atqConv = new Lista();
         Lista lista = j1.getPaisesObtenidos().listar();
         for (int i = 1; i <= lista.longitud(); i++) {
-
             Pais p = (Pais) lista.recuperar(i);
-            p = (Pais) mundoTEG.buscarEnProfundidad(p.getNombre());
-
             int fichas = p.getFichas();
             Lista adyacentes = mundoTEG.listarArcos(p);
             for (int j = 1; j <= adyacentes.longitud(); j++) {
-
                 Pais ady = (Pais) adyacentes.recuperar(j);
-                ady = (Pais) mundoTEG.buscarEnProfundidad(ady.getNombre());
-
-                if (relacion.containsKey(ady)) {
-                    Jugador dueño = (Jugador) relacion.get(ady);
+                if (relacion.containsKey(ady.getNombre())) {
+                    Jugador dueño = (Jugador) relacion.get(ady.getNombre());
                     if (!dueño.getNombre().equals(j1.getNombre())) {
                         if (fichas > ady.getFichas()) {
-                            atqConv.insertar(p.getNombre() + " >> " + ady.getNombre());
+                            atqConv.insertarInicio(p.getNombre() + " >> " + ady.getNombre());
                         }
                     }
                 }
@@ -761,7 +860,7 @@ public class JuegoJEG {
 
     //VA GANANDO
     private static void vaGanandoView() {
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             Ventanas.mostrarMensaje("Va Ganando", "Va ganando el jugador: " + vaGanando().getNombre());
         } else {
             Ventanas.mostrarError(errorMapaVacio);
@@ -784,7 +883,7 @@ public class JuegoJEG {
     //CUMPLIO OBJETIVO
     private static void cumplioObjetivoView() {
         Jugador ganador;
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             ganador = cumplioObjetivo();
             if (ganador != null) {
                 Ventanas.mostrarMensaje("GANADOR", "El jugador " + ganador + " ha ganado");
@@ -808,7 +907,7 @@ public class JuegoJEG {
 
     //MOSTRAR ESTADO
     private static void mostrarEstado() {
-        if (!mundoTEG.esVacio()) {
+        if (mapaCreado) {
             Ventanas.mostrarTexto("MUNDO TEG", "Distribucion del Mundo:\n" + mundoTEG.toString(), 50, 25);
             for (int i = 0; i < jugadores.length; i++) {
                 Ventanas.mostrarTexto("AVL DE JUGADOR " + (i + 1) + ": " + jugadores[i].getNombre(), jugadores[i].getPaisesObtenidos().toString(), 50, 25);

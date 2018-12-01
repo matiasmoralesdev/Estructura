@@ -2,8 +2,8 @@ package juego;
 
 public class Pais implements Comparable {
 
-    String nombre;
-    int cantEjercitos;
+    private String nombre;
+    private int cantEjercitos;
 
     public Pais(String name, int fichas) {
         this.nombre = name;
@@ -77,10 +77,7 @@ public class Pais implements Comparable {
     @Override
     public int hashCode() {
         return nombre.hashCode(); //To change body of generated methods, choose Tools | Templates.
-        
+
     }
-    
-    
-    
 
 }

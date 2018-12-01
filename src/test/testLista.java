@@ -14,9 +14,14 @@ public class testLista {
         lista.insertar("Perro");
         lista.insertar("Gato");
         lista.insertar("Caca");
+        lista.insertar("Cacota");
         
         System.out.println(lista.toString());
         System.out.println(lista.clonar().toString());
+        
+        
+        lista.eliminar(lista.longitud());
+        System.out.println(lista.toString());        
     }
 
 }

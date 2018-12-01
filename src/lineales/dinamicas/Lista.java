@@ -109,6 +109,15 @@ public class Lista {
         return exito;
     }
 
+    public boolean eliminarInicio() {
+        boolean exito = false;
+        if (this.cabecera != null) {
+            this.cabecera = this.cabecera.getEnlace();
+            exito = true;
+        }
+        return exito;
+    }
+
     public Comparable recuperar(int pos) {
         Comparable respuesta = null;
         Nodo aux = this.cabecera;
@@ -143,7 +152,9 @@ public class Lista {
                 aux = aux.getEnlace();
                 auxClon = auxClon.getEnlace();
             }
+            clon.longitud = this.longitud;
         }
+
         return clon;
     }
 
