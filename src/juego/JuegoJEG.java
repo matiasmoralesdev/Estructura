@@ -643,6 +643,7 @@ public class JuegoJEG {
                                     pais2.sumarFicha(1);
                                     jugador1.getPaisesObtenidos().insertar(pais2);
                                     jugador2.getPaisesObtenidos().eliminar(pais2);
+                                    Ventanas.mostrarMensaje("CONQUISTA", "EL JUGADOR " + jugador1.getNombre() + " CONQUISTO " + pais2.getNombre());
 
                                     //Salida a archivo
                                     salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
@@ -653,14 +654,16 @@ public class JuegoJEG {
                                 pais1.quitarFicha(1);
                                 Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " fallo el ataque a " + p2);
                                 //Salida a archivo
-                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A"
-                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + "con resultado FALIIDO");
+                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A " 
+                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + " con resultado FALIIDO");
 
                                 if (pais1.getFichas() == 0) {
                                     relacion.replace(pais1.getNombre(), jugador2);
                                     pais2.sumarFicha(1);
                                     jugador2.getPaisesObtenidos().insertar(pais1);
                                     jugador1.getPaisesObtenidos().eliminar(pais1);
+
+                                    Ventanas.mostrarMensaje("PERDIDA", "EL JUGADOR " + jugador1.getNombre() + " PERDIO " + pais1.getNombre());
 
                                     //Salida a archivo
                                     salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
@@ -785,7 +788,7 @@ public class JuegoJEG {
     public static int cantJugadasMinimas(String pais1, String pais2) {
         Lista camino;
         camino = mundoTEG.caminoMasCorto(pais1, pais2);
-        return camino.longitud()-1;
+        return camino.longitud() - 1;
     }
 
     //ES POSIBLE LLEGAR
