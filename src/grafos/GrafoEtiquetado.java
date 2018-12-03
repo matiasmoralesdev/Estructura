@@ -338,21 +338,45 @@ public class GrafoEtiquetado {
         return exito;
     }
 
+    public boolean existeMasCorto(Comparable origen, Comparable destino, int k) {
+        boolean respuesta = false;
+        Lista lista = new Lista();
+        NodoVertice auxO = ubicarVertice(origen);
+        NodoVertice auxD = ubicarVertice(destino);
+        if (auxO != null && auxD != null) {
+            respuesta = existeMasCorto(auxO, destino, k, lista);
+        }
+        return respuesta;
+    }
+
+    private boolean existeMasCorto(NodoVertice n, Comparable dest, int k, Lista vis) {
+        boolean exito = false;
+
+        if (vis.longitud() <= k) {
+            vis.insertar(n.getElem());
+            if (n.getElem().equals(dest)) {
+                exito = true;
+            } else {
+                NodoAdyEti ady = n.getPrimerAdy();
+                while (ady != null && !exito) {
+
+                    if (vis.localizar(ady.getVertice().getElem()) < 0) {
+                        exito = existeMasCorto(ady.getVertice(), dest, k, vis);
+                    }
+                    ady = ady.getSigAdyacente();
+                }
+            }
+            vis.eliminar(vis.longitud());
+        }
+
+        return exito;
+    }
+
     private Lista caminoMasCorto(NodoVertice n, Comparable dest, Lista vis, Lista exito) {
         vis.insertar(n.getElem());
         if (exito.esVacia() || vis.longitud() < exito.longitud()) {
-
-            //System.out.println(vis.toString());
             if (n.getElem().equals(dest)) {
                 exito = vis.clonar();
-                //System.out.println("<<<<<ENCONTRADO " + exito.toString());
-//                if (exito.esVacia()) {
-//                    exito = vis.clonar();
-//                    System.out.println("PRIMER EXITO:" + exito.toString());
-//                } else {
-//                    exito = vis.clonar();
-//                    System.out.println("OTRO EXITO:" + exito.toString());
-//                }
             } else {
                 //si no es el destino verifica si hay camino entre n y destino
                 NodoAdyEti ady = n.getPrimerAdy();

@@ -1,5 +1,7 @@
 package lineales.dinamicas;
 
+import juego.Pais;
+
 public class Lista {
 
     private Nodo cabecera;
@@ -46,6 +48,7 @@ public class Lista {
     public void insertar(Comparable elem) {
         if (esVacia()) {
             this.cabecera = new Nodo(elem);
+
         } else {
             Nodo aux = this.cabecera;
             while (aux.getEnlace() != null) {
@@ -96,6 +99,7 @@ public class Lista {
             exito = false;
         } else if (pos == 1) {
             this.cabecera = this.cabecera.getEnlace();
+            this.longitud--;
         } else {
             Nodo aux = this.cabecera;
             int i = 1;
@@ -114,6 +118,7 @@ public class Lista {
         if (this.cabecera != null) {
             this.cabecera = this.cabecera.getEnlace();
             exito = true;
+            this.longitud--;
         }
         return exito;
     }
@@ -163,7 +168,14 @@ public class Lista {
         Nodo aux = this.cabecera;
         int i = 0;
         while (aux != null) {
-            arreglo[i] = aux.getElem().toString();
+            Comparable elem = aux.getElem();
+            if (elem.getClass() == Pais.class) {
+                Pais p = (Pais) elem;
+                arreglo[i] = p.getNombre();
+            } else {
+                arreglo[i] = elem.toString();
+
+            }
             aux = aux.getEnlace();
             i++;
         }

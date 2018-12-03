@@ -7,6 +7,8 @@ import ventanas.Ventanas;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Random;
 import lineales.dinamicas.Lista;
 
@@ -27,8 +29,8 @@ public class JuegoJEG {
     static boolean mapaCreado = false;
 
     public static void main(String[] args) throws FileNotFoundException {
-
-        salida = new PrintWriter(new FileOutputStream("log.txt"));
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        salida = new PrintWriter(new FileOutputStream("logs/log" + timeStamp + ".txt"));
 
         //Mecanismo del menu
         int opcion;
@@ -97,7 +99,7 @@ public class JuegoJEG {
             contador = 0;
             actual = jugadores[i];
             salida.println();
-            salida.println("> JUGADOR " + i + " : " + actual.getNombre());
+            salida.println("> JUGADOR " + (i + 1) + " : " + actual.getNombre());
             listaPaises = actual.getPaisesObtenidos().listar();
             salida.println("> Distribucion de paises: " + listaPaises.toString());
             for (int j = 1; j < listaPaises.longitud(); j++) {
@@ -183,7 +185,7 @@ public class JuegoJEG {
         String[] opciones = mundoTEG.listarArcos(pais).toArrayString();
         String opcion;
         //mostrar el menu y leer la opcion
-        opcion = Ventanas.pedirUnaOpcion("Paises Limitrofes de" + pais, "Elija una opcion", opciones);
+        opcion = Ventanas.pedirUnaOpcion("Paises Limitrofes de " + pais, "Elija una opcion", opciones);
         if (opcion == null) {
             opcion = "";
         }
@@ -581,7 +583,6 @@ public class JuegoJEG {
 
         listaPaises = arbolOrden.listar();
         arrayStringPaises = listaPaises.toArrayString();
-
     }
 
     private static void asignarJugadores() {
@@ -631,11 +632,11 @@ public class JuegoJEG {
                                     + "\nJUGADOR " + jugador2.getNombre() + " - DADO: " + dado2);
                             if (dado1 > dado2) {
                                 pais2.quitarFicha(1);
-                                Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " ataco con exito a " + p2);
+                                Ventanas.mostrarMensaje("ATAQUE", "El pais " + p1 + " ataco con exito a " + p2);
 
                                 //Salida a archivo
-                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A"
-                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + "con resultado EXITOSO");
+                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A "
+                                        + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + " con resultado EXITOSO");
                                 //
 
                                 if (pais2.getFichas() == 0) {
@@ -646,7 +647,7 @@ public class JuegoJEG {
                                     Ventanas.mostrarMensaje("CONQUISTA", "EL JUGADOR " + jugador1.getNombre() + " CONQUISTO " + pais2.getNombre());
 
                                     //Salida a archivo
-                                    salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
+                                    salida.println("% El jugador " + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
                                     //
 
                                 }
@@ -654,7 +655,7 @@ public class JuegoJEG {
                                 pais1.quitarFicha(1);
                                 Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " fallo el ataque a " + p2);
                                 //Salida a archivo
-                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A " 
+                                salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A "
                                         + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + " con resultado FALIIDO");
 
                                 if (pais1.getFichas() == 0) {
@@ -666,7 +667,7 @@ public class JuegoJEG {
                                     Ventanas.mostrarMensaje("PERDIDA", "EL JUGADOR " + jugador1.getNombre() + " PERDIO " + pais1.getNombre());
 
                                     //Salida a archivo
-                                    salida.println("% El jugador" + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
+                                    salida.println("% El jugador " + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
                                     //
                                 }
                             }
@@ -746,7 +747,7 @@ public class JuegoJEG {
                     palabra = "eliminado";
                 }
                 Ventanas.mostrarMensaje("EXITO", "Se han " + palabra + " las fichas correctamente\n"
-                        + p.toString() + " tiene ahora " + p.getFichas() + " fichas");
+                        + p.getNombre() + " tiene ahora " + p.getFichas() + " fichas");
             }
         } else {
             Ventanas.mostrarError(errorMapaVacio);
@@ -758,7 +759,7 @@ public class JuegoJEG {
         boolean encontrado = false;
         Pais pais = null;
         while (i < jugadores.length && !encontrado) {
-            pais = (Pais) jugadores[i].getPaisesObtenidos().recuperar(pais);
+            pais = (Pais) jugadores[i].getPaisesObtenidos().recuperar(p);
             if (pais != null) {
                 encontrado = true;
             }
@@ -770,14 +771,18 @@ public class JuegoJEG {
     //CANTIDAD DE JUGADAS MINIMAS
     private static void cantJugadasMinimasView() {
         String p1, p2;
-        Pais pais1, pais2;
+        int respuesta;
         if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
                 p2 = mostrarPaises();
                 if (!p2.isEmpty()) {
-                    int respuesta = cantJugadasMinimas(p1, p2);
-                    Ventanas.mostrarMensaje("Minimas Jugadas", "La cantidad minimas de jugadas necesarias es: " + respuesta);
+                    if (p2.equals(p1)) {
+                        Ventanas.mostrarError("Debe elegir un pais diferente");
+                    } else {
+                        respuesta = cantJugadasMinimas(p1, p2);
+                        Ventanas.mostrarMensaje("Jugadas Minimas", "La cantidad minimas de jugadas necesarias es: " + respuesta);
+                    }
                 }
             }
         } else {
@@ -788,25 +793,32 @@ public class JuegoJEG {
     public static int cantJugadasMinimas(String pais1, String pais2) {
         Lista camino;
         camino = mundoTEG.caminoMasCorto(pais1, pais2);
+        System.out.println(camino.toString());
         return camino.longitud() - 1;
+    }
+
+    public static boolean sePuedeLlegarEn(String pais1, String pais2, int k) {
+        return mundoTEG.existeMasCorto(pais1, pais2, k);
     }
 
     //ES POSIBLE LLEGAR
     private static void esPosibleLlegarView() {
         String p1, p2;
-        int k, respuesta;
-        Pais pais1, pais2;
+        int k;
         if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
                 p2 = mostrarPaises();
                 if (!p2.isEmpty()) {
-                    k = leerCantidadPasos();
-                    respuesta = cantJugadasMinimas(p1, p2);
-                    if (respuesta > k) {
-                        Ventanas.mostrarError("No es posible llegar en " + k + " pasos");
+                    if (p2.equals(p1)) {
+                        Ventanas.mostrarError("Debe elegir un pais diferente");
                     } else {
-                        Ventanas.mostrarMensaje("Exito", "Es posible llegar en " + k + " pasos");
+                        k = leerCantidadPasos();
+                        if (sePuedeLlegarEn(p1, p2, k)) {
+                            Ventanas.mostrarMensaje("Exito", "Es posible llegar en " + k + " pasos");
+                        } else {
+                            Ventanas.mostrarError("No es posible llegar en " + k + " pasos");
+                        }
                     }
                 }
             }
@@ -913,9 +925,10 @@ public class JuegoJEG {
         if (mapaCreado) {
             Ventanas.mostrarTexto("MUNDO TEG", "Distribucion del Mundo:\n" + mundoTEG.toString(), 50, 25);
             for (int i = 0; i < jugadores.length; i++) {
-                Ventanas.mostrarTexto("AVL DE JUGADOR " + (i + 1) + ": " + jugadores[i].getNombre(), jugadores[i].getPaisesObtenidos().toString(), 50, 25);
+                Ventanas.mostrarTexto("AVL DE JUGADOR " + (i + 1) + ": " + jugadores[i].getNombre(),
+                        jugadores[i].getPaisesObtenidos().toString(), 50, 25);
             }
-            Ventanas.mostrarTexto("MAPEO ", relacion.toString(), 50, 25);
+            Ventanas.mostrarTexto("MAPEO ", relacion.toString(), 50, 10);
         } else {
             Ventanas.mostrarError(errorMapaVacio);
         }
