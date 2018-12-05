@@ -101,11 +101,13 @@ public class JuegoJEG {
             salida.println();
             salida.println("> JUGADOR " + (i + 1) + " : " + actual.getNombre());
             listaPaises = actual.getPaisesObtenidos().listar();
-            salida.println("> Distribucion de paises: " + listaPaises.toString());
+            salida.print("> Distribucion de paises: ");
             for (int j = 1; j < listaPaises.longitud(); j++) {
                 p = (Pais) listaPaises.recuperar(j);
+                salida.print(p.getNombre() + "(" + p.getFichas() + ") - ");
                 contador += p.getFichas();
             }
+            salida.println();
             salida.println("> Cantidad total de ejercitos: " + contador);
             salida.println();
         }
@@ -171,10 +173,9 @@ public class JuegoJEG {
     }
 
     private static String mostrarPaises() {
-        String[] opciones = arrayStringPaises;
         String opcion;
         //mostrar el menu y leer la opcion
-        opcion = Ventanas.pedirUnaOpcion("Lista de Paises", "Elija un Pais", opciones);
+        opcion = Ventanas.pedirUnaOpcion("Lista de Paises", "Elija un Pais", arrayStringPaises);
         if (opcion == null) {
             opcion = "";
         }
@@ -292,9 +293,9 @@ public class JuegoJEG {
         Ventanas.mostrarMensaje("Dados tirados", j2 + " ha sacado un " + dado2);
 
         dado3 = new Random().nextInt(6) + 1;
-        while (dado2 == dado1 || dado2 == dado1) {
+        while (dado3 == dado1 || dado3 == dado2) {
             Ventanas.mostrarError(j3 + " ha sacado un " + dado3 + " VUELVE A TIRAR");
-            dado2 = new Random().nextInt(6) + 1;
+            dado3 = new Random().nextInt(6) + 1;
         }
         Ventanas.mostrarMensaje("Dados tirados", j3 + " ha sacado un " + dado3);
 
@@ -616,20 +617,25 @@ public class JuegoJEG {
         if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
+                //Si elige la opcion CANCELAR vuelve al menu principal
                 jugador1 = (Jugador) relacion.get(p1);
                 pais1 = (Pais) jugador1.getPaisesObtenidos().recuperar(p1);
                 if (pais1.getFichas() > 1) {
+                    //Si el pais no tiene como minimo 2 fichas no podra atacar
                     p2 = mostrarPaisesLimitrofes(p1);
-
                     if (!p2.isEmpty()) {
+                        //Si elige la opcion CANCELAR vuelve al menu principal
                         jugador2 = (Jugador) relacion.get(p2);
                         pais2 = (Pais) jugador2.getPaisesObtenidos().recuperar(p2);
-
                         if (!jugador1.getNombre().equals(jugador2.getNombre())) {
+                            //Si el pais pertenece al mismo jugador dipara un error
+
+                            //Se tiran 2 dados
                             dado1 = new Random().nextInt(6) + 1;
                             dado2 = new Random().nextInt(6) + 1;
                             Ventanas.mostrarMensaje("DADOS", "JUGADOR " + jugador1.getNombre() + " - DADO: " + dado1
                                     + "\nJUGADOR " + jugador2.getNombre() + " - DADO: " + dado2);
+
                             if (dado1 > dado2) {
                                 pais2.quitarFicha(1);
                                 Ventanas.mostrarMensaje("ATAQUE", "El pais " + p1 + " ataco con exito a " + p2);
@@ -640,6 +646,7 @@ public class JuegoJEG {
                                 //
 
                                 if (pais2.getFichas() == 0) {
+                                    //Si el pais atacado se queda sin fichas, el atacante lo conquista
                                     relacion.replace(pais2.getNombre(), jugador1);
                                     pais2.sumarFicha(1);
                                     jugador1.getPaisesObtenidos().insertar(pais2);
@@ -653,23 +660,10 @@ public class JuegoJEG {
                                 }
                             } else {
                                 pais1.quitarFicha(1);
-                                Ventanas.mostrarMensaje("ATAQUE", "El pais" + p1 + " fallo el ataque a " + p2);
+                                Ventanas.mostrarMensaje("ATAQUE", "El pais " + p1 + " fallo el ataque a " + p2);
                                 //Salida a archivo
                                 salida.println("# El Pais " + pais1.getNombre() + " perteneciente a " + jugador1.getNombre() + " ATACO A "
                                         + pais2.getNombre() + " perteneciente a " + jugador2.getNombre() + " con resultado FALIIDO");
-
-                                if (pais1.getFichas() == 0) {
-                                    relacion.replace(pais1.getNombre(), jugador2);
-                                    pais2.sumarFicha(1);
-                                    jugador2.getPaisesObtenidos().insertar(pais1);
-                                    jugador1.getPaisesObtenidos().eliminar(pais1);
-
-                                    Ventanas.mostrarMensaje("PERDIDA", "EL JUGADOR " + jugador1.getNombre() + " PERDIO " + pais1.getNombre());
-
-                                    //Salida a archivo
-                                    salida.println("% El jugador " + jugador1.getNombre() + " Conquisto " + pais2.getNombre());
-                                    //
-                                }
                             }
                         } else {
                             Ventanas.mostrarError("No se puede atacar un pais propio");
@@ -684,8 +678,8 @@ public class JuegoJEG {
         }
 
     }
+    
     //OBTENER CANTIDAD DE PAISES
-
     private static void obtenerCantPaises() {
         int respuesta;
         if (mapaCreado) {
@@ -731,12 +725,15 @@ public class JuegoJEG {
 
     //AGREGAR Y ELIMINAR FICHAS
     private static void modificarFichas(boolean valor) {
+        //Si valor es "true" el metodo agregara fichas
+        //Si valor es "false" el metodo quitara fichas
         String pais, palabra;
         Pais p;
         int cantidad;
         if (mapaCreado) {
             pais = mostrarPaises();
             if (!pais.isEmpty()) {
+                //Si elige la opcion CANCELAR vuelve al menu principal
                 p = obtenerPais(pais);
                 cantidad = leerCantidadFichas(valor, p.getFichas());
                 if (valor) {
@@ -775,8 +772,10 @@ public class JuegoJEG {
         if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
+                //Si elige la opcion cancelar vuelve al menu principal
                 p2 = mostrarPaises();
                 if (!p2.isEmpty()) {
+                    //Si elige la opcion cancelar vuelve al menu principal
                     if (p2.equals(p1)) {
                         Ventanas.mostrarError("Debe elegir un pais diferente");
                     } else {
@@ -793,7 +792,6 @@ public class JuegoJEG {
     public static int cantJugadasMinimas(String pais1, String pais2) {
         Lista camino;
         camino = mundoTEG.caminoMasCorto(pais1, pais2);
-        System.out.println(camino.toString());
         return camino.longitud() - 1;
     }
 
@@ -808,8 +806,10 @@ public class JuegoJEG {
         if (mapaCreado) {
             p1 = mostrarPaises();
             if (!p1.isEmpty()) {
+                //Si elige la opcion CANCELAR vuelve al menu principal
                 p2 = mostrarPaises();
                 if (!p2.isEmpty()) {
+                    //Si elige la opcion CANCELAR vuelve al menu principal
                     if (p2.equals(p1)) {
                         Ventanas.mostrarError("Debe elegir un pais diferente");
                     } else {
@@ -833,6 +833,8 @@ public class JuegoJEG {
         if (mapaCreado) {
             int jugador = mostrarJugadores();
             if (jugador != -1) {
+                //Si elige la opcion CANCELAR vuelve al menu principal
+                
                 Jugador j1 = jugadores[jugador];
                 Lista atq = obtenerAtqConvenientes(j1);
                 String s = "";
