@@ -38,5 +38,14 @@ public class testGrafoEtiquetado {
         System.out.println(p.toString());
         System.out.println(grafo.existeCamino("Argentina", "Chile"));
         System.out.println("CAMINO MAS CORTO: " + grafo.caminoMasCorto("Argentina", "Japon").toString());
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------");
+        grafo.eliminarVertice("Japon");
+        System.out.println(grafo.toString());
+        System.out.println(grafo.listarEnProfundidad().toString());
+
     }
 }

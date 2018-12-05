@@ -49,13 +49,47 @@ public class GrafoEtiquetado {
      * @return
      */
     public boolean eliminarVertice(Comparable vertice) {
+        NodoVertice aux = this.inicio;
         boolean exito = false;
+        boolean eliminado = eliminarVerticeInterno(vertice);
+        if (eliminado) {
+            while (aux != null) {
+                eliminarArco(aux, vertice);
+                aux = aux.getSigVertice();
+            }
+            exito = true;
+        }
 
         return exito;
     }
-    
-    
-    
+
+    private boolean eliminarVerticeInterno(Comparable elem) {
+        boolean eliminado = false;
+        NodoVertice aux;
+        NodoVertice siguiente;
+        if (this.inicio.getElem().equals(elem)) {
+            this.inicio = this.inicio.getSigVertice();
+            eliminado = true;
+        } else {
+            aux = this.inicio;
+            if (aux != null) {
+                siguiente = aux.getSigVertice();
+                while (siguiente != null) {
+                    if (siguiente.getElem().equals(elem)) {
+                        aux.setSigVertice(siguiente.getSigVertice());
+                        eliminado = true;
+                    } else {
+                        aux = aux.getSigVertice();
+                        siguiente = siguiente.getSigVertice();
+                    }
+
+                }
+
+            }
+
+        }
+        return eliminado;
+    }
 
     /**
      *
@@ -69,28 +103,56 @@ public class GrafoEtiquetado {
         NodoVertice auxO = ubicarVertice(origen);
         NodoVertice auxD = ubicarVertice(destino);
 
-        NodoAdyEti siguiente;
-
+        //NodoAdyEti siguiente;
         if (auxO != null && auxD != null) {
             //Verifica si ambos vertices existen
-            NodoAdyEti ady = auxO.getPrimerAdy();
-            if (ady != null) {
-                siguiente = ady.getSigAdyacente();
-                if (ady.getVertice().getElem().equals(destino)) {
-                    auxO.setPrimerAdy(siguiente);
-                } else {
-                    while (siguiente != null && !exito) {
-                        if (siguiente.getVertice().getElem().equals(destino)) {
-                            ady.setSigAdy(siguiente.getSigAdyacente());
-                            exito = true;
-                        } else {
-                            ady = ady.getSigAdyacente();
-                            siguiente = siguiente.getSigAdyacente();
-                        }
+
+            exito = eliminarArco(auxO, destino);
+
+//            NodoAdyEti ady = auxO.getPrimerAdy();
+//            if (ady != null) {
+//                siguiente = ady.getSigAdyacente();
+//                if (ady.getVertice().getElem().equals(destino)) {
+//                    auxO.setPrimerAdy(siguiente);
+//                    exito = true;
+//                } else {
+//                    while (siguiente != null && !exito) {
+//                        if (siguiente.getVertice().getElem().equals(destino)) {
+//                            ady.setSigAdy(siguiente.getSigAdyacente());
+//                            exito = true;
+//                        } else {
+//                            ady = ady.getSigAdyacente();
+//                            siguiente = siguiente.getSigAdyacente();
+//                        }
+//                    }
+//                }
+//            }
+        }
+        return exito;
+    }
+
+    private boolean eliminarArco(NodoVertice nOrigen, Comparable destino) {
+        boolean exito = false;
+        NodoAdyEti siguiente;
+        NodoAdyEti ady = nOrigen.getPrimerAdy();
+        if (ady != null) {
+            siguiente = ady.getSigAdyacente();
+            if (ady.getVertice().getElem().equals(destino)) {
+                nOrigen.setPrimerAdy(siguiente);
+                exito = true;
+            } else {
+                while (siguiente != null && !exito) {
+                    if (siguiente.getVertice().getElem().equals(destino)) {
+                        ady.setSigAdy(siguiente.getSigAdyacente());
+                        exito = true;
+                    } else {
+                        ady = ady.getSigAdyacente();
+                        siguiente = siguiente.getSigAdyacente();
                     }
                 }
             }
         }
+
         return exito;
     }
 
@@ -107,42 +169,43 @@ public class GrafoEtiquetado {
         NodoAdyEti siguiente;
         if (auxO != null && auxD != null) {
             //Verifica si ambos vertices existen
-            NodoAdyEti ady = auxO.getPrimerAdy();
-            if (ady != null) {
-                siguiente = ady.getSigAdyacente();
-                if (ady.getVertice().getElem().equals(destino)) {
-                    auxO.setPrimerAdy(siguiente);
-                } else {
-                    while (siguiente != null && !exito) {
-                        if (siguiente.getVertice().getElem().equals(destino)) {
-                            ady.setSigAdy(siguiente.getSigAdyacente());
-                            exito = true;
-                        } else {
-                            ady = ady.getSigAdyacente();
-                            siguiente = siguiente.getSigAdyacente();
-                        }
-                    }
-                }
-            }
-            exito = false;
-            ady = auxD.getPrimerAdy();
-            if (ady != null) {
-                siguiente = ady.getSigAdyacente();
-                if (ady.getVertice().getElem().equals(origen)) {
-                    auxD.setPrimerAdy(siguiente);
-                } else {
-                    while (siguiente != null && !exito) {
-                        if (siguiente.getVertice().getElem().equals(origen)) {
-                            ady.setSigAdy(siguiente.getSigAdyacente());
-                            exito = true;
-                        } else {
-                            ady = ady.getSigAdyacente();
-                            siguiente = siguiente.getSigAdyacente();
-                        }
-                    }
-                }
-            }
-
+            exito = eliminarArco(auxO, destino);
+            exito = eliminarArco(auxD, origen);
+//            NodoAdyEti ady = auxO.getPrimerAdy();
+//            if (ady != null) {
+//                siguiente = ady.getSigAdyacente();
+//                if (ady.getVertice().getElem().equals(destino)) {
+//                    auxO.setPrimerAdy(siguiente);
+//                } else {
+//                    while (siguiente != null && !exito) {
+//                        if (siguiente.getVertice().getElem().equals(destino)) {
+//                            ady.setSigAdy(siguiente.getSigAdyacente());
+//                            exito = true;
+//                        } else {
+//                            ady = ady.getSigAdyacente();
+//                            siguiente = siguiente.getSigAdyacente();
+//                        }
+//                    }
+//                }
+//            }
+//            exito = false;
+//            ady = auxD.getPrimerAdy();
+//            if (ady != null) {
+//                siguiente = ady.getSigAdyacente();
+//                if (ady.getVertice().getElem().equals(origen)) {
+//                    auxD.setPrimerAdy(siguiente);
+//                } else {
+//                    while (siguiente != null && !exito) {
+//                        if (siguiente.getVertice().getElem().equals(origen)) {
+//                            ady.setSigAdy(siguiente.getSigAdyacente());
+//                            exito = true;
+//                        } else {
+//                            ady = ady.getSigAdyacente();
+//                            siguiente = siguiente.getSigAdyacente();
+//                        }
+//                    }
+//                }
+//            }
         }
         return exito;
     }
