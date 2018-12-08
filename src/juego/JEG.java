@@ -5,7 +5,6 @@ import grafos.GrafoEtiquetado;
 import java.util.HashMap;
 import java.util.Random;
 import lineales.dinamicas.Lista;
-import ventanas.Ventanas;
 
 public class JEG {
 

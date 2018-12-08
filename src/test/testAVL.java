@@ -20,12 +20,12 @@ public class testAVL {
 //        Pais p10 = new Pais("Zonux", 0);
 //        Pais p11 = new Pais("Zonuz", 0);
 
-        avl.insertar(12);
-        avl.insertar(5);
-        avl.insertar(23);
-        avl.insertar(3);
         avl.insertar(8);
-        avl.insertar(10);
+        avl.insertar(5);
+        avl.insertar(15);
+        avl.insertar(13);
+        avl.insertar(20);
+        avl.insertar(29);
         System.out.println(avl.toString());
         System.out.println("-------------");
         //avl.eliminar(15);

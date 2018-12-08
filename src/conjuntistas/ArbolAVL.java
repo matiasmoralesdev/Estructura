@@ -38,8 +38,7 @@ public class ArbolAVL {
             } else {
                 nodo.setIzquierdo(insertar(elemento, nodo.getIzquierdo(), v));
             }
-            nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
-
+            nodo.recalcularAltura();
             nodo = balancear(nodo);
             //elem es mayor que nodo.getElem()
         } else if (elemento.compareTo(nodo.getElem()) > 0) {
@@ -49,9 +48,7 @@ public class ArbolAVL {
             } else {
                 nodo.setDerecho(insertar(elemento, nodo.getDerecho(), v));
             }
-
-            nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
-
+            nodo.recalcularAltura();
             nodo = balancear(nodo);
         } else {
             //Error Elemento repetido
@@ -77,13 +74,14 @@ public class ArbolAVL {
         if (elem.compareTo(nodo.getElem()) < 0) {
             if (nodo.getIzquierdo() != null) {
                 nodo.setIzquierdo(eliminar(elem, nodo.getIzquierdo(), v));
-                nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
+                nodo.recalcularAltura();
                 nodo = balancear(nodo);
             }
         } else if (elem.compareTo(nodo.getElem()) > 0) {
             if (nodo.getDerecho() != null) {
                 nodo.setDerecho(eliminar(elem, nodo.getDerecho(), v));
-                nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
+                //nodo.setAltura(Math.max(altura(nodo.getIzquierdo()), altura(nodo.getDerecho())) + 1);
+                nodo.recalcularAltura();
                 nodo = balancear(nodo);
             }
         } else {
@@ -158,26 +156,14 @@ public class ArbolAVL {
         return this.size;
     }
 
-    private int balance(NodoAVL nodo) {
-        return altura(nodo.getIzquierdo()) - altura(nodo.getDerecho());
-    }
-
-    private int altura(NodoAVL nodo) {
-        int h = -1;
-        if (nodo != null) {
-            h = nodo.getAltura();
-        }
-        return h;
-    }
-
     private NodoAVL balancear(NodoAVL nodo) {
         NodoAVL h = nodo;
-        int balancePadre = balance(nodo);
+        int balancePadre = nodo.balance();
         int balanceHijo;
         if (balancePadre == -2) {
             //Arbol caido hacia la derecha
             //Se procede a balancearlo hacia la izquierda
-            balanceHijo = balance(nodo.getDerecho());
+            balanceHijo = nodo.getDerecho().balance();
             if (balanceHijo == -1) {
                 h = rotSimpleIzq(nodo);
             } else {
@@ -187,7 +173,7 @@ public class ArbolAVL {
         if (balancePadre == 2) {
             //Arbol caido a la izquierda
             //Se procede a balancearlo a la derecha
-            balanceHijo = balance(nodo.getIzquierdo());
+            balanceHijo = nodo.getIzquierdo().balance();
 
             if (balanceHijo == 1) {
                 //Rotacion simple a Derecha
@@ -209,7 +195,8 @@ public class ArbolAVL {
         h.setIzquierdo(nodo);
         nodo.setDerecho(temp);
 
-        nodo.sumarAltura(-2);
+        nodo.recalcularAltura();
+        h.recalcularAltura();
         return h;
     }
 
@@ -217,62 +204,35 @@ public class ArbolAVL {
         //Rotacion simple a Derecha
         NodoAVL h = nodo.getIzquierdo();
         NodoAVL temp = h.getDerecho();
-
+        
         h.setDerecho(nodo);
         nodo.setIzquierdo(temp);
-
-        nodo.sumarAltura(-2);
+        
+        nodo.recalcularAltura();
+        h.recalcularAltura();
         return h;
     }
 
     private NodoAVL rotDobleDerIzq(NodoAVL nodo) {
         //Rotacion  doble Derecha-Izquierda
-        NodoAVL r1 = nodo.getDerecho();
-        NodoAVL h1 = r1.getIzquierdo();
-        NodoAVL temp1 = h1.getDerecho();
 
-        r1.setIzquierdo(temp1);
-
-        h1.setDerecho(r1);
-        nodo.setDerecho(h1);
-        r1.sumarAltura(-1);
-        h1.sumarAltura(1);
-
-        NodoAVL r2 = nodo;
-        NodoAVL h2 = r2.getDerecho();
-        NodoAVL temp2 = h2.getIzquierdo();
-
-        h2.setIzquierdo(r2);
-        r2.setDerecho(temp2);
-
-        r2.sumarAltura(-2);
-
-        return h2;
+        //Rotacion simple a derecha con pivote en el hijo derecho del nodo
+        NodoAVL r1 = rotSimpleDer(nodo.getDerecho());
+        nodo.setDerecho(r1);
+        //Rotacion simple a izquierda con pivote en el nodo padre
+        nodo = rotSimpleIzq(nodo);
+        return nodo;
     }
 
     private NodoAVL rotDobleIzqDer(NodoAVL nodo) {
         //Rotacion doble Izquierda-Derecha
-        NodoAVL r1 = nodo.getIzquierdo();
-        NodoAVL h1 = r1.getDerecho();
-        NodoAVL temp1 = h1.getIzquierdo();
 
-        h1.setIzquierdo(r1);
-        r1.setDerecho(temp1);
-        nodo.setIzquierdo(h1);
-        r1.sumarAltura(-1);
-        h1.sumarAltura(1);
-
-        NodoAVL r2 = nodo;
-        NodoAVL h2 = r2.getIzquierdo();
-        NodoAVL temp2 = h2.getDerecho();
-
-        h2.setDerecho(r2);
-        r2.setIzquierdo(temp2);
-
-        //
-        r2.sumarAltura(-2);
-        //
-        return h2;
+        //Rotacion simple a izquierda con el hijo izquierdo
+        NodoAVL r1 = rotSimpleIzq(nodo.getIzquierdo());
+        nodo.setIzquierdo(r1);
+        //Rotacion simple a derecha con el nodo padre
+        nodo = rotSimpleDer(nodo);
+        return nodo;
     }
 
     public Lista listar() {

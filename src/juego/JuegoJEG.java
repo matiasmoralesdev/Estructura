@@ -521,7 +521,7 @@ public class JuegoJEG {
     //MOSTRAR ESTADO
     private static void mostrarEstado() {
         if (juego.mapaCreado()) {
-            Ventanas.mostrarTexto("MUNDO TEG", "Distribucion del Mundo:\n" + juego.mostrarMundo(), 50, 25);
+            Ventanas.mostrarTexto("MUNDO TEG", "Distribucion del Mundo:\n\n" + juego.mostrarMundo(), 50, 25);
             for (int i = 0; i < juego.cantidadDeJugadores(); i++) {
                 Ventanas.mostrarTexto("AVL DE JUGADOR " + (i + 1),
                         juego.datosDeJugador(i), 50, 25);

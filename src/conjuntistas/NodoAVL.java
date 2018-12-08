@@ -36,6 +36,38 @@ public class NodoAVL {
         return this.elemento;
     }
 
+    public void recalcularAltura() {
+        int left, right;
+        if (this.izquierdo != null) {
+            left = this.izquierdo.altura;
+        } else {
+            left = -1;
+        }
+        if (this.derecho != null) {
+            right = this.derecho.altura;
+        } else {
+            right = -1;
+        }
+        this.altura = Math.max(left, right) + 1;
+    }
+
+    public int balance() {
+        int left, right, balance;
+        if (this.izquierdo != null) {
+            left = this.izquierdo.altura;
+        } else {
+            left = -1;
+        }
+
+        if (this.derecho != null) {
+            right = this.derecho.altura;
+        } else {
+            right = -1;
+        }
+        balance = left - right;
+        return balance;
+    }
+
     public int getAltura() {
         return this.altura;
     }
