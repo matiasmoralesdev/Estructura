@@ -195,6 +195,20 @@ public class Lista {
         return arreglo;
     }
 
+    public String aCadena() {
+        String s = "";
+        if (this.cabecera != null) {
+
+            Nodo aux = this.cabecera;
+            while (aux != null) {
+                s += aux.getElem().toString() + "\n";
+                aux = aux.getEnlace();
+            }
+
+        }
+        return s;
+    }
+
     @Override
     public String toString() {
         String s = "";

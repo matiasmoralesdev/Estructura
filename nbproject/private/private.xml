@@ -5,9 +5,8 @@
         <group>
             <file>file:/home/matt/Proyectos/Java/Estructura/src/lineales/dinamicas/Lista.java</file>
             <file>file:/home/matt/Proyectos/Java/Estructura/src/juego/JuegoJEG.java</file>
-            <file>file:/home/matt/Proyectos/Java/Estructura/src/juego/Jugador.java</file>
-            <file>file:/home/matt/Proyectos/Java/Estructura/src/juego/Pais.java</file>
-            <file>file:/home/matt/Proyectos/Java/Estructura/src/grafos/GrafoEtiquetado.java</file>
+            <file>file:/home/matt/Proyectos/Java/Estructura/src/conjuntistas/ArbolAVL.java</file>
+            <file>file:/home/matt/Proyectos/Java/Estructura/src/juego/JEG.java</file>
         </group>
     </open-files>
 </project-private>

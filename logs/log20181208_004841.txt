@@ -1,5 +1,5 @@
 
-> JUGADOR 1 : Alfa
+> JUGADOR 1 : Gama
 > Distribucion de paises: ALASKA(3) - ARAL(3) - BORNEO(3) - CANADA(3) - COLOMBIA(3) - ETIOPIA(3) - GRAN BRETAÑA(3) - IRAN(3) - ITALIA(3) - KAMCHATKA(3) - MALASIA(3) - NUEVA YORK(3) - POLONIA(3) - SIBERIA(3) - SUMATRA(3) - TERRANOVA(3) - 
 > Cantidad total de ejercitos: 48
 
@@ -9,7 +9,7 @@
 > Cantidad total de ejercitos: 48
 
 
-> JUGADOR 3 : Gama
+> JUGADOR 3 : Alfa
 > Distribucion de paises: ARABIA(3) - AUSTRALIA(3) - CALIFORNA(3) - CHINA(3) - ESPAÑA(3) - GOBI(3) - INDIA(3) - ISRAEL(3) - JAVA(3) - MADAGASCAR(3) - MONGOLIA(3) - PERU(3) - SAHARA(3) - SUECIA(3) - TARTARIA(3) - 
 > Cantidad total de ejercitos: 45
 
