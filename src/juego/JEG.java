@@ -11,7 +11,7 @@ public class JEG {
     private final int CANTJUGADORES = 3;
 
     private GrafoEtiquetado mundoTEG = new GrafoEtiquetado();
-    private Jugador[] jugadores;
+    private final Jugador[] jugadores;
     private HashMap relacion = new HashMap();
     private String[] arrayStringPaises;
     private boolean mapaCreado;

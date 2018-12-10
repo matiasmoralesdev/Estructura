@@ -18,11 +18,8 @@ public class Lista {
             exito = false;
         } else {
             if (pos == 1) {
-
                 this.cabecera = new Nodo(elem, this.cabecera);
-
             } else {
-
                 Nodo aux = this.cabecera;
                 int i = 1;
                 while (i < pos - 1) {
@@ -35,7 +32,6 @@ public class Lista {
             }
             this.longitud++;
         }
-
         return exito;
     }
 

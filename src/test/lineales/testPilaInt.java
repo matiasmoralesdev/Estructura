@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package test;
+package test.lineales;
 import lineales.estaticas.PilaInt;
 /**
  *

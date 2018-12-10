@@ -94,7 +94,7 @@ public class JuegoJEG {
             salida.println("> JUGADOR " + (i + 1) + " : " + actual.getNombre());
             listaPaises = actual.getPaisesObtenidos().listar();
             salida.print("> Distribucion de paises: ");
-            for (int j = 1; j < listaPaises.longitud(); j++) {
+            for (int j = 1; j <= listaPaises.longitud(); j++) {
                 p = (Pais) listaPaises.recuperar(j);
                 salida.print(p.getNombre() + "(" + p.getFichas() + ") - ");
                 contador += p.getFichas();
@@ -103,7 +103,6 @@ public class JuegoJEG {
             salida.println("> Cantidad total de ejercitos: " + contador);
             salida.println();
         }
-
     }
 
     //MENUS DE SELECCION

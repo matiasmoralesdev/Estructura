@@ -1,4 +1,4 @@
-package test;
+package test.conjuntistas;
 
 import conjuntistas.ArbolAVL;
 import juego.Pais;
