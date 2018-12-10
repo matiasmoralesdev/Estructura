@@ -9,7 +9,7 @@ package jerarquicas;
  *
  * @author Matthew
  */
-public class NodoGenerico {
+public class NodoGenerico implements Comparable {
 
     //Atributos
     private Comparable elem;
@@ -53,6 +53,17 @@ public class NodoGenerico {
 
     public void setHijoIzquierdo(NodoGenerico hijoIzquierdo) {
         this.hijoIzquierdo = hijoIzquierdo;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int retorno;
+        if (o.getClass() == this.getClass()) {
+            retorno = this.elem.compareTo(o);
+        } else {
+            retorno = this.elem.compareTo(o.toString());
+        }
+        return retorno;
     }
 
 }

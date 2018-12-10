@@ -33,7 +33,7 @@ public class JEG {
         Pais peru = new Pais("PERU");
         Pais colombia = new Pais("COLOMBIA");
         Pais mexico = new Pais("MEXICO");
-        Pais california = new Pais("CALIFORNA");
+        Pais california = new Pais("CALIFORNIA");
         Pais oregon = new Pais("OREGON");
         Pais yukon = new Pais("YUKON");
         Pais alaska = new Pais("ALASKA");
@@ -266,7 +266,13 @@ public class JEG {
 
         Lista listaPaises = arbolOrden.listar();
         asignarJugadores(listaPaises);
-        arrayStringPaises = listaPaises.toArrayString();
+        arrayStringPaises = new String[listaPaises.longitud()];
+
+        for (int i = 1; i <= listaPaises.longitud(); i++) {
+            Pais p = (Pais) listaPaises.recuperar(i);
+            arrayStringPaises[i - 1] = p.getNombre();
+        }
+
         mapaCreado = true;
     }
 

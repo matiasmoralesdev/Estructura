@@ -71,7 +71,7 @@ public class JuegoJEG {
                     break;
                 case 13: //salir()
                     if (juego.mapaCreado()) {
-                        salir();
+                        guardarInfo();
                     }
                     salir = true;
                     salida.close();
@@ -82,7 +82,7 @@ public class JuegoJEG {
 
     }
 
-    private static void salir() {
+    private static void guardarInfo() {
         Jugador actual;
         Lista listaPaises;
         int contador;
@@ -107,7 +107,7 @@ public class JuegoJEG {
 
     //MENUS DE SELECCION
     private static int mostrarMenu() {
-        int opcionElegida = -1;
+        int opcionElegida;
         String[] opciones = {"1. Crear Mapa", "2. Atacar", "3. Obtener Cantidad de Paises",
             "4. Obtener Vecinos", "5. Crear Pacto", "6. Agregar Fichas", "7. Quitar Fichas",
             "8. Cantidad de Jugadas Minimas", "9. ¿Es posible Llegar?", "10. Obtener Ataques Convenientes",
@@ -136,7 +136,7 @@ public class JuegoJEG {
     }
 
     private static int mostrarJugadores() {
-        int opcionElegida = -1;
+        int opcionElegida;
         int cantidadJugadores = juego.cantidadDeJugadores();
         String[] opciones = new String[cantidadJugadores];
         for (int i = 0; i < cantidadJugadores; i++) {
@@ -206,7 +206,7 @@ public class JuegoJEG {
                     } else {
                         Ventanas.mostrarError("Debe ser una cantidad positiva.\n Intente de nuevo.");
                     }
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     Ventanas.mostrarError("Debe ingresar un numero.\n Intente de nuevo.");
                 }
             } else {
@@ -232,7 +232,7 @@ public class JuegoJEG {
                     } else {
                         Ventanas.mostrarError("Debe ser una cantidad positiva.\n Intente de nuevo.");
                     }
-                } catch (Exception e) {
+                } catch (NumberFormatException e) {
                     Ventanas.mostrarError("Debe ingresar un numero.\n Intente de nuevo.");
                 }
             } else {
@@ -247,6 +247,11 @@ public class JuegoJEG {
         if (!juego.mapaCreado()) {
             crearJugadores();
             juego.crearMapa();
+            salida.println("#################################");
+            salida.println("ESTADO INICIAL");
+            salida.println("#################################");
+            guardarInfo();
+            salida.println("#################################");
             Ventanas.mostrarMensaje("Mapa Creado", "El mapa se ha creado correctamente! ");
         } else {
             Ventanas.mostrarError("Ya existe un mapa creado!");

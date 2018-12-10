@@ -32,6 +32,9 @@ public class testArbolGenerico {
         System.out.println("PADRE DE " + i + ": " + arbol.padre(i));
         System.out.println("PREORDEN: " + arbol.listarPreOrden().toString());
         System.out.println("INORDEN: " + arbol.listarInOrden().toString());
+        System.out.println("POSORDEN: " + arbol.listarPosOrden().toString());
+        System.out.println("LISTAR POR NIVELES: " + arbol.listarPorNiveles().toString());
+        System.out.println("CLON:\n");
 
     }
 }

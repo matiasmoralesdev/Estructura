@@ -170,7 +170,6 @@ public class Lista {
                 arreglo[i] = p.getNombre();
             } else {
                 arreglo[i] = elem.toString();
-
             }
             aux = aux.getEnlace();
             i++;
@@ -194,7 +193,6 @@ public class Lista {
     public String aCadena() {
         String s = "";
         if (this.cabecera != null) {
-
             Nodo aux = this.cabecera;
             while (aux != null) {
                 s += aux.getElem().toString() + "\n";

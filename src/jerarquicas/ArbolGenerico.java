@@ -1,6 +1,8 @@
 package jerarquicas;
 
+import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
+import lineales.dinamicas.Nodo;
 
 /**
  *
@@ -276,6 +278,48 @@ public class ArbolGenerico {
         }
         lista.insertar(nodo.getElem());
 
+    }
+
+    /**
+     * Devuelve una lista con los elementos del árbol en el recorrido por
+     * niveles
+     *
+     * @return
+     */
+    public Lista listarPorNiveles() {
+        Lista lista = new Lista();
+        Cola q = new Cola();
+        NodoGenerico nodo, nodoHijo;
+        q.poner(this.raiz);
+        while (!q.esVacia()) {
+            nodo = (NodoGenerico) q.obtenerFrente();
+            q.sacar();
+            lista.insertar(nodo.getElem());
+            nodoHijo = nodo.getHijoIzquierdo();
+            while (nodoHijo != null) {
+                q.poner(nodoHijo);
+                nodoHijo = nodoHijo.getHermanoDerecho();
+            }
+        }
+        return lista;
+    }
+
+    /**
+     * Genera y devuelve un árbol genérico que es equivalente (igual estructura
+     * y contenido de los nodos) que el árbol original.
+     *
+     * @return
+     */
+    public ArbolGenerico clonar() {
+        ArbolGenerico clon = new ArbolGenerico();
+        return clon;
+    }
+
+    /**
+     * Quita todos los elementos de la estructura.
+     */
+    public void vaciar() {
+        this.raiz = null;
     }
 
     private NodoGenerico buscarNodo(Comparable buscado) {

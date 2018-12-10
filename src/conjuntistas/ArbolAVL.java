@@ -96,7 +96,6 @@ public class ArbolAVL {
                 nodo.setElem(aux.getElem());
                 nodo.setDerecho(eliminar(aux.getElem(), nodo.getDerecho(), v));
             }
-            //nodo = balancear(nodo);
             v.setValor(true);
         }
 
@@ -147,7 +146,6 @@ public class ArbolAVL {
             } else {
                 retorno = recuperar(nodo.getIzquierdo(), elem);
             }
-
         }
         return retorno;
     }

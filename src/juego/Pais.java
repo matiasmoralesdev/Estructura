@@ -45,33 +45,33 @@ public class Pais implements Comparable {
 
     @Override
     public boolean equals(Object o) {
-        return this.nombre.equals(o.toString());
-    }
-
-    public boolean equals(Pais p) {
-        return this.nombre.equals(p.nombre);
-    }
-
-    public boolean equals(String s) {
-        return this.nombre.equals(s);
+        boolean valor;
+        Pais p;
+        if (o.getClass() == this.getClass()) {
+            p = (Pais) o;
+            valor = this.nombre.equals(p.nombre);
+        } else {
+            valor = this.nombre.equals(o.toString());
+        }
+        return valor;
     }
 
     @Override
     public int compareTo(Object o) {
-        return this.nombre.compareTo(o.toString());
-    }
-
-    public int compareTo(Pais p) {
-        return this.nombre.compareTo(p.nombre);
-    }
-
-    public int compareTo(String s) {
-        return this.nombre.compareTo(s);
+        int valor;
+        Pais p;
+        if (o.getClass() == this.getClass()) {
+            p = (Pais) o;
+            valor = this.nombre.compareTo(p.nombre);
+        } else {
+            valor = this.nombre.compareTo(o.toString());
+        }
+        return valor;
     }
 
     @Override
     public String toString() {
-        return this.nombre;
+        return this.nombre + "(" + this.cantEjercitos + ")";
     }
 
     public String aCadena() {
