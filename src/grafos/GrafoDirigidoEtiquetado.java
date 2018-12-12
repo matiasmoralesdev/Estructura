@@ -6,14 +6,18 @@ import lineales.dinamicas.Lista;
  *
  * @author Matthew
  */
-public class GrafoEtiquetado {
+public class GrafoDirigidoEtiquetado {
 
+    /**
+     *
+     * @author Matthew
+     */
     private NodoVertice inicio;
 
     /**
      * Constructor Vacio Crea un grafo vacío
      */
-    public GrafoEtiquetado() {
+    public GrafoDirigidoEtiquetado() {
         this.inicio = null;
     }
 
@@ -54,7 +58,7 @@ public class GrafoEtiquetado {
         boolean eliminado = eliminarVerticeInterno(vertice);
         if (eliminado) {
             while (aux != null) {
-                GrafoEtiquetado.this.eliminarArco(aux, vertice);
+                eliminarArco(aux, vertice);
                 aux = aux.getSigVertice();
             }
             exito = true;
@@ -91,6 +95,24 @@ public class GrafoEtiquetado {
         return eliminado;
     }
 
+    /**
+     *
+     * @param origen
+     * @param destino
+     * @return
+     */
+    public boolean eliminarArco(Comparable origen, Comparable destino) {
+        boolean exito = false;
+        NodoVertice auxO = ubicarVertice(origen);
+        NodoVertice auxD = ubicarVertice(destino);
+        //NodoAdyEti siguiente;
+        if (auxO != null && auxD != null) {
+            //Verifica si ambos vertices existen
+            exito = eliminarArco(auxO, destino);
+        }
+        return exito;
+    }
+
     private boolean eliminarArco(NodoVertice nOrigen, Comparable destino) {
         boolean exito = false;
         NodoAdyEti siguiente;
@@ -118,48 +140,23 @@ public class GrafoEtiquetado {
 
     /**
      *
-     * @param origen
-     * @param destino
-     * @return
-     */
-    public boolean eliminarArco(Comparable origen, Comparable destino) {
-        boolean exito = false;
-        NodoVertice auxO = ubicarVertice(origen);
-        NodoVertice auxD = ubicarVertice(destino);
-        if (auxO != null && auxD != null) {
-            //Verifica si ambos vertices existen
-            exito = GrafoEtiquetado.this.eliminarArco(auxO, destino);
-            exito = GrafoEtiquetado.this.eliminarArco(auxD, origen);
-        }
-        return exito;
-    }
-
-    /**
-     *
-     * @param origen
-     * @param destino
-     * @param etiqueta
-     * @return
+     * @param origen: vertice del cual se genera un nuevo arco
+     * @param destino: vertice destino del arco
+     * @param etiqueta: etiqueta del arco
+     * @return exito Si creo un nuevo arco(True) si no(False)
      */
     public boolean insertarArco(Comparable origen, Comparable destino, String etiqueta) {
         boolean exito = false;
         NodoVertice auxO = ubicarVertice(origen);
         NodoVertice auxD = ubicarVertice(destino);
         if (auxO != null && auxD != null) {
-
+            //Verifica si ambos vertices existen
             NodoAdyEti ady = auxO.getPrimerAdy();
             if (!existeArco(auxO, destino)) {
                 NodoAdyEti nuevo = new NodoAdyEti(auxD, etiqueta);
                 nuevo.setSigAdy(ady);
                 auxO.setPrimerAdy(nuevo);
                 exito = true;
-
-                ady = auxD.getPrimerAdy();
-                if (!existeArco(auxD, origen)) {
-                    nuevo = new NodoAdyEti(auxO, etiqueta);
-                    nuevo.setSigAdy(ady);
-                    auxD.setPrimerAdy(nuevo);
-                }
             }
         }
         return exito;
@@ -317,6 +314,7 @@ public class GrafoEtiquetado {
 
     private boolean existeMasCorto(NodoVertice n, Comparable dest, int k, Lista vis) {
         boolean exito = false;
+
         if (vis.longitud() <= k) {
             vis.insertar(n.getElem());
             if (n.getElem().equals(dest)) {

@@ -174,7 +174,7 @@ public class JuegoJEG {
     }
 
     private static String mostrarPaisesLimitrofes(String pais) {
-        String[] opciones = juego.obtenerVecinos(pais).toArrayString();
+        String[] opciones = juego.getVecinos(pais);
         String opcion;
         //mostrar el menu y leer la opcion
         opcion = Ventanas.pedirUnaOpcion("Paises Limitrofes de " + pais, "Elija una opcion", opciones);

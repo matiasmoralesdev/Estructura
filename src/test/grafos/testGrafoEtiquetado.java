@@ -15,21 +15,21 @@ public class testGrafoEtiquetado {
         grafo.insertarVertice(new Pais("Canada"));
         grafo.insertarVertice(new Pais("China"));
         grafo.insertarVertice(new Pais("Japon"));
-        grafo.insertarArcoDoble("Argentina", "Chile", "jajas");
-        grafo.insertarArcoDoble("Argentina", "Peru", "jajas");
-        grafo.insertarArcoDoble("Argentina", "Canada", "jajas");
-        grafo.insertarArcoDoble("Peru", "Chile", "jajas");
-        grafo.insertarArcoDoble("Canada", "Bolivia", "jajas");
-        grafo.insertarArcoDoble("Paraguay", "Chile", "jajas");
-        grafo.insertarArcoDoble("Japon", "Chile", "jajas");
-        grafo.insertarArcoDoble("China", "Chile", "jajas");
+        grafo.insertarArco("Argentina", "Chile", "jajas");
+        grafo.insertarArco("Argentina", "Peru", "jajas");
+        grafo.insertarArco("Argentina", "Canada", "jajas");
+        grafo.insertarArco("Peru", "Chile", "jajas");
+        grafo.insertarArco("Canada", "Bolivia", "jajas");
+        grafo.insertarArco("Paraguay", "Chile", "jajas");
+        grafo.insertarArco("Japon", "Chile", "jajas");
+        grafo.insertarArco("China", "Chile", "jajas");
 
-        grafo.insertarArcoDoble("China", "Japon", "jajas");
+        grafo.insertarArco("China", "Japon", "jajas");
 
         System.out.println(grafo.toString());
         System.out.println(grafo.listarEnProfundidad().toString());
 
-        grafo.eliminarArcoDoble("Peru", "Argentina");
+        grafo.eliminarArco("Peru", "Argentina");
 
         System.out.println(grafo.toString());
         System.out.println(grafo.listarEnProfundidad().toString());
