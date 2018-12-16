@@ -1,6 +1,7 @@
 package test.jerarquicas;
 
 import jerarquicas.ArbolGenerico;
+import lineales.dinamicas.Lista;
 
 /**
  *
@@ -35,6 +36,12 @@ public class testArbolGenerico {
         System.out.println("POSORDEN: " + arbol.listarPosOrden().toString());
         System.out.println("LISTAR POR NIVELES: " + arbol.listarPorNiveles().toString());
         System.out.println("CLON:\n");
+        System.out.println("VERIFICAR CAMINO: ");
+        Lista l = new Lista();
+        l.insertar(1);
+        l.insertar(2);
+        l.insertar(10);
+        System.out.println(arbol.verificarCamino(l, l.longitud()));
 
     }
 }

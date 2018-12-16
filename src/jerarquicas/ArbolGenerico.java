@@ -2,7 +2,6 @@ package jerarquicas;
 
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
-import lineales.dinamicas.Nodo;
 
 /**
  *
@@ -339,6 +338,34 @@ public class ArbolGenerico {
 
         }
         return nodoObtenido;
+    }
+
+    public boolean verificarCamino(Lista listElem, int niv) {
+        return verificarCamino(this.raiz, listElem, niv, 0);
+    }
+
+    private boolean verificarCamino(NodoGenerico nodo, Lista listElem, int niv, int actual) {
+        boolean exito = false;
+        if (actual <= niv && niv < listElem.longitud()) {
+            System.out.println("ACTUAL: " + actual + " NIVEL:" + niv);
+            while (nodo != null && !exito) {
+                Comparable elem = listElem.recuperar(actual + 1);
+                if (nodo.getElem().compareTo(elem) == 0) {
+                    System.out.println("ENTRO ACA");
+                    System.out.println("ELEM:" + elem.toString());
+                    System.out.println("NODO:" + nodo.getElem().toString());
+                    if (actual == niv) {
+                        System.out.println("ENTRO");
+                        exito = true;
+                    } else {
+                        System.out.println("VA POR EL HIJO");
+                        exito = verificarCamino(nodo.getHijoIzquierdo(), listElem, niv, actual + 1);
+                    }
+                }
+                nodo = nodo.getHermanoDerecho();
+            }
+        }
+        return exito;
     }
 
     @Override

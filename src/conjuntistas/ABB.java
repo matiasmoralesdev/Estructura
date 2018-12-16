@@ -1,4 +1,4 @@
-package jerarquicas;
+package conjuntistas;
 
 import lineales.dinamicas.ListaInt;
 

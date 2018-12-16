@@ -129,7 +129,7 @@ public class GrafoEtiquetado {
         if (auxO != null && auxD != null) {
             //Verifica si ambos vertices existen
             exito = GrafoEtiquetado.this.eliminarArco(auxO, destino);
-            exito = GrafoEtiquetado.this.eliminarArco(auxD, origen);
+  //          exito = GrafoEtiquetado.this.eliminarArco(auxD, origen);
         }
         return exito;
     }
