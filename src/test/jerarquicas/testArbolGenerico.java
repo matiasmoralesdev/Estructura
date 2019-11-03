@@ -24,6 +24,11 @@ public class testArbolGenerico {
         arbol.insertar(15, 10);
         arbol.insertar(20, 10);
         arbol.insertar(300, 20);
+        arbol.insertar(2, 300);
+        arbol.insertar(333, 300);
+        arbol.insertar(42, 333);
+        arbol.insertar(50, 42);
+        arbol.insertar(30, 50);
 
         System.out.println(arbol.toString());
         System.out.println(arbol.ancestros(20).toString());
@@ -42,6 +47,8 @@ public class testArbolGenerico {
         l.insertar(2);
         l.insertar(10);
         System.out.println(arbol.verificarCamino(l, l.longitud()));
+        System.out.println(arbol.descendienteMasLejano(2));
+        System.out.println("CAMINO ALTURA: "+arbol.caminoQueJustificaLaAltura().toString());
 
     }
 }

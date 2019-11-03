@@ -128,8 +128,8 @@ public class GrafoEtiquetado {
         NodoVertice auxD = ubicarVertice(destino);
         if (auxO != null && auxD != null) {
             //Verifica si ambos vertices existen
-            exito = GrafoEtiquetado.this.eliminarArco(auxO, destino);
-  //          exito = GrafoEtiquetado.this.eliminarArco(auxD, origen);
+            exito = eliminarArco(auxO, destino);
+            exito = eliminarArco(auxD, origen);
         }
         return exito;
     }
@@ -356,6 +356,36 @@ public class GrafoEtiquetado {
         }
         vis.eliminar(vis.longitud());
         return exito;
+    }
+
+    public Lista caminoDeLongitudMenorA(Comparable origen, Comparable destino, int longMax) {
+        Lista vis = new Lista();
+        Lista retorno = new Lista();
+        NodoVertice auxO = ubicarVertice(origen);
+        NodoVertice auxD = ubicarVertice(destino);
+        if (auxO != null && auxD != null) {
+            retorno = caminoDeLongitudMenorA(auxO, destino, longMax, vis, retorno);
+        }
+        return retorno;
+    }
+
+    private Lista caminoDeLongitudMenorA(NodoVertice nodo, Comparable destino, int longMax, Lista vis, Lista retorno) {
+        vis.insertar(nodo.getElem());
+        if (vis.longitud() <= longMax) {
+            if (nodo.getElem().compareTo(destino) == 0) {
+                retorno = vis.clonar();
+            } else {
+                NodoAdyEti ady = nodo.getPrimerAdy();
+                while (ady != null && retorno.esVacia()) {
+                    if (vis.localizar(ady.getVertice().getElem()) < 0) {
+                        retorno = caminoDeLongitudMenorA(ady.getVertice(), destino, longMax, vis, retorno);
+                    }
+                    ady = ady.getSigAdyacente();
+                }
+            }
+        }
+        vis.eliminar(vis.longitud());
+        return retorno;
     }
 
     public Lista listarArcos(Comparable elem) {

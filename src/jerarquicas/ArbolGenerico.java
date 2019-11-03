@@ -368,6 +368,53 @@ public class ArbolGenerico {
         return exito;
     }
 
+    public int descendienteMasLejano(Comparable d) {
+        return descendienteMasLejano(this.raiz, d, 0);
+    }
+
+    private int descendienteMasLejano(NodoGenerico n, Comparable d, int niv) {
+        int respuesta = -1, respAux;
+        while (n != null) {
+            if (n.getElem().compareTo(d) == 0 && respuesta == -1) {
+                respuesta = niv;
+            }
+            respAux = descendienteMasLejano(n.getHijoIzquierdo(), d, (niv + 1));
+            if (respAux > respuesta) {
+                respuesta = respAux;
+            }
+            n = n.getHermanoDerecho();
+        }
+        return respuesta;
+    }
+
+    public Lista caminoQueJustificaLaAltura() {
+        Lista vis = new Lista();
+        Lista salida = new Lista();
+        salida = caminoQueJustificaLaAltura(this.raiz, vis, salida);
+        return salida;
+    }
+
+    private Lista caminoQueJustificaLaAltura(NodoGenerico n, Lista vis, Lista exito) {
+        Lista aux;
+        while (n != null) {
+            vis.insertar(n.getElem());
+            if (n.getHijoIzquierdo() == null) {
+                aux = vis.clonar();
+            } else {
+                aux = caminoQueJustificaLaAltura(n.getHijoIzquierdo(), vis, exito);
+            }
+            
+            
+            if (aux.longitud() > exito.longitud()) {
+                exito = aux;
+            }
+            n = n.getHermanoDerecho();
+            vis.eliminar(vis.longitud());
+        }
+
+        return exito;
+    }
+
     @Override
     public String toString() {
         return toString(this.raiz);

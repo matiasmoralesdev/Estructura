@@ -6,7 +6,7 @@ import lineales.dinamicas.Lista;
  *
  * @author Matthew
  */
-public class GrafoDirigidoEtiquetado {
+public class DigrafoEtiquetado {
 
     /**
      *
@@ -17,7 +17,7 @@ public class GrafoDirigidoEtiquetado {
     /**
      * Constructor Vacio Crea un grafo vacío
      */
-    public GrafoDirigidoEtiquetado() {
+    public DigrafoEtiquetado() {
         this.inicio = null;
     }
 

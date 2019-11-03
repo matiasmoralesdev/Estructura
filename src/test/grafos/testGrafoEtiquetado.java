@@ -43,9 +43,10 @@ public class testGrafoEtiquetado {
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
         System.out.println("-----------------------------");
-        grafo.eliminarVertice("Japon");
-        System.out.println(grafo.toString());
-        System.out.println(grafo.listarEnProfundidad().toString());
+        //grafo.eliminarVertice("Japon");
+        //System.out.println(grafo.toString());
+        //System.out.println(grafo.listarEnProfundidad().toString());
+        System.out.println(grafo.caminoDeLongitudMenorA("Argentina", "Japon", 3).toString());
 
     }
 }
